@@ -27,26 +27,30 @@ subprojects {
 }
 
 subprojects {
-    plugins.withType(org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPlugin) {
+    plugins.withId('kotlin-android') {
         tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
             kotlinOptions {
                 jvmTarget = '17'
             }
         }
     }
-    plugins.withType(com.android.build.gradle.LibraryPlugin) {
-        android {
-            compileOptions {
-                sourceCompatibility JavaVersion.VERSION_17
-                targetCompatibility JavaVersion.VERSION_17
+    plugins.withId('com.android.application') {
+        afterEvaluate {
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
             }
         }
     }
-    plugins.withType(com.android.build.gradle.ApplicationPlugin) {
-        android {
-            compileOptions {
-                sourceCompatibility JavaVersion.VERSION_17
-                targetCompatibility JavaVersion.VERSION_17
+    plugins.withId('com.android.library') {
+        afterEvaluate {
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
             }
         }
     }
