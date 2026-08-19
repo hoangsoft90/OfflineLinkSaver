@@ -121,7 +121,8 @@ After build completes:
 | Java version mismatch | Ensure `java-version: '17'` |
 | Dependency errors | Run `flutter pub get` locally first |
 | Gradle errors | Check `android/build.gradle` compatibility |
-| Analyze errors | Fix warnings or use `--no-fatal-infos` |
+| Analyze errors | Use `--no-fatal-infos --no-fatal-warnings` |
+| local.properties missing | Workflow creates it automatically |
 
 ### Check Build Logs
 1. Go to Actions tab
