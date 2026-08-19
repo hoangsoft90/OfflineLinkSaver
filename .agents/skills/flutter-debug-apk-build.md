@@ -143,3 +143,5 @@ flutter build apk --debug
 - Retention: 7 days on GitHub Actions
 - No EAS token required (uses Gradle directly)
 - Java 17 required for Android Gradle Plugin 8.x
+- Workflow creates `local.properties` automatically
+- Gradle files handle missing local.properties gracefully
