@@ -159,7 +159,7 @@ class WebViewFallbackExtractor {
 
       final result = await controller.runJavaScriptReturningResult(script);
       
-      if (result == null || result.toString() == 'null') {
+      if (result.toString() == 'null') {
         return null;
       }
 

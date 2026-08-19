@@ -122,7 +122,7 @@ class DownloadQueueManager {
       }
 
       // If HTTP fails, try WebView fallback
-      if (result != null && !result.success && result.needsWebView) {
+      if (!result.success && result.needsWebView) {
         _emitProgress(articleId, 'Trying alternative method...');
         
         try {
@@ -301,10 +301,9 @@ class DownloadQueueManager {
 
 /// Simple semaphore for concurrency control
 class _Semaphore {
-  final int _maxCount;
   int _current;
 
-  _Semaphore(int maxCount) : _maxCount = maxCount, _current = maxCount;
+  _Semaphore(int maxCount) : _current = maxCount;
 
   int get available => _current;
 
