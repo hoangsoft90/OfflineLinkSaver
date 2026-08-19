@@ -6,7 +6,8 @@
 
 **Phase:** MVP Core Pipeline — Implementation in progress
 **Version:** 1.0.0+1
-**Git:** Not initialized (no commits yet)
+**Git:** Initialized, pushed to GitHub
+**Repo:** https://github.com/hoangsoft90/OfflineLinkSaver
 
 ## What's Built (Working)
 
@@ -59,10 +60,14 @@
 - [x] StatusBadge with retry button
 - [x] ReaderControls with theme/font/actions
 
+### CI/CD ✅
+- [x] GitHub Actions workflow for debug APK build
+- [x] Skill for future debug APK builds
+
 ## What's NOT Built Yet
 
 ### Not Started
-- [ ] Tests (unit, widget, integration)
+- [ ] Tests (unit, widget, integration) — partially done
 - [ ] iOS Share Extension (P2)
 - [ ] Cloud sync / accounts (P2)
 - [ ] AI summary / tagging (P2)
@@ -80,17 +85,16 @@
 
 ## Known Issues / Tech Debt
 
-1. **No tests** — Need unit tests for repository, extractor, sanitizer
-2. **No git repo** — Should initialize and make first commit
-3. **Cover image in reader** — Currently loads from network (breaks offline)
-4. **Error handling** — Some catch blocks are generic, could be more specific
-5. **WebView extractor** — Returns null on some edge cases (acceptable per spec)
+1. **Tests incomplete** — Some test files exist but need expansion
+2. **Cover image in reader** — Currently loads from network (breaks offline)
+3. **Error handling** — Some catch blocks are generic, could be more specific
+4. **WebView extractor** — Returns null on some edge cases (acceptable per spec)
 
 ## Next Steps (Priority Order)
 
 ### Immediate (P0 Completion)
-1. Initialize git repository + first commit
-2. Add unit tests for core modules
+1. Verify GitHub Actions build completes successfully
+2. Fix any build errors found
 3. Test extraction on 15-20 real websites
 4. Verify all 9 Release Gates on real device
 5. Fix any issues found during testing
@@ -130,3 +134,15 @@ MVP is done when ALL 9 pass:
 7. [ ] Clean delete (DB + files gone)
 8. [ ] Atomic file integrity (content.json always valid)
 9. [ ] Storage full handled gracefully
+
+## CI/CD Status
+
+- **GitHub Actions:** Configured and pushed
+- **Workflow:** `.github/workflows/build-debug-apk.yml`
+- **Build:** Debug APK (no keystore)
+- **Trigger:** Push to main/master, PR, or manual
+- **Artifact:** Uploaded for 7 days
+
+## Skills Created
+
+- `.agents/skills/flutter-debug-apk-build.md` — Reusable skill for debug APK builds
