@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class NetworkClient {
   static const int _timeoutSeconds = 15;
   static const int _maxRedirectHops = 5;
-  static const int _maxResponseSize = 2 * 1024 * 1024; // 2MB safety guard
+  static const int _maxResponseSize = 5 * 1024 * 1024; // 5MB — modern pages can be large
 
   /// Content types that are acceptable for article extraction
   static final _allowedContentTypes = {

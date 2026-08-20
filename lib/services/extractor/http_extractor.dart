@@ -45,7 +45,11 @@ class HttpExtractor {
         );
       }
 
-      final htmlContent = response.body;
+      var htmlContent = response.body;
+      
+      // Strip <script> and <style> tags to reduce document size
+      htmlContent = htmlContent.replaceAll(RegExp(r'<script[^>]*>[\s\S]*?</script>', caseSensitive: false), '');
+      htmlContent = htmlContent.replaceAll(RegExp(r'<style[^>]*>[\s\S]*?</style>', caseSensitive: false), '');
       
       // Parse HTML
       final document = html_parser.parse(htmlContent);
