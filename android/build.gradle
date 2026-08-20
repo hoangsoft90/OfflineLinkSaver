@@ -23,26 +23,31 @@ subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 
-// Force consistent JVM target for all subprojects using lazy task configuration.
-// Do NOT use afterEvaluate — Gradle 8.x may have already evaluated subprojects.
-subprojects {
-    plugins.withId('kotlin-android') {
-        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-            kotlinOptions {
-                jvmTarget = '17'
+// Force consistent JVM target for all subprojects after all projects are evaluated.
+// This ensures plugins like receive_sharing_intent get Java+Kotlin aligned at 17.
+gradle.projectsEvaluated {
+    subprojects { proj ->
+        plugins.withId('com.android.application') {
+            proj.android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+                kotlinOptions {
+                    jvmTarget = '17'
+                }
             }
         }
-    }
-    plugins.withId('com.android.application') {
-        tasks.withType(JavaCompile).configureEach {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
-        }
-    }
-    plugins.withId('com.android.library') {
-        tasks.withType(JavaCompile).configureEach {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
+        plugins.withId('com.android.library') {
+            proj.android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+                kotlinOptions {
+                    jvmTarget = '17'
+                }
+            }
         }
     }
 }
