@@ -146,3 +146,18 @@ flutter build apk --debug
 - Java 17 required for Android Gradle Plugin 8.x
 - Workflow creates `local.properties` automatically
 - Gradle files handle missing local.properties gracefully
+
+## Real Device Testing (August 2026)
+
+Tested on Pixel 3a. Bugs found and fixed:
+
+1. **UI auto-refresh** — Added StreamSubscription on DownloadQueueManager.progressStream in HomeScreen
+2. **Error message preservation** — WebView fallback null result now preserves original HTTP error
+3. **URL title extraction** — Improved cleanup: shows "domain / path-segment" instead of raw path
+
+## Known Gradle Issues
+
+- `afterEvaluate` fails in Gradle 8.x with "Cannot run Project.afterEvaluate when project is already evaluated"
+- Solution: Use `gradle.projectsEvaluated` or `plugins.withId` + `tasks.withType` (lazy config)
+- `kotlinOptions` not available on `LibraryExtension` — set via `tasks.withType(KotlinCompile)` instead
+- `receive_sharing_intent` plugin defaults Java to 1.8 — must override in root build.gradle
