@@ -7,6 +7,22 @@ class NetworkClient {
   static const int _maxRedirectHops = 5;
   static const int _maxResponseSize = 2 * 1024 * 1024; // 2MB safety guard
 
+  /// Content types that are acceptable for article extraction
+  static final _allowedContentTypes = {
+    'text/html', 'text/plain', 'application/xhtml',
+    'application/xhtml+xml', 'application/xml', 'text/xml',
+  };
+
+  /// Check if a Content-Type header indicates downloadable HTML content
+  static bool _isAcceptableContentType(String? contentType) {
+    if (contentType == null) return true; // Assume OK if no header (some servers omit it)
+    final mime = contentType.split(';').first.trim().toLowerCase();
+    // Accept if it's HTML-like or if it's generic/octet (some servers misconfigure)
+    return _allowedContentTypes.contains(mime) ||
+           mime.startsWith('text/') ||
+           mime.contains('html');
+  }
+
   /// Fetch URL with redirect resolution (max 5 hops)
   /// Returns the final response after following redirects
   static Future<http.Response> fetchWithRedirects(String url) async {
@@ -18,6 +34,12 @@ class NetworkClient {
         final response = await http.get(
           Uri.parse(currentUrl),
         ).timeout(const Duration(seconds: _timeoutSeconds));
+
+        // Check Content-Type early to reject binary/non-HTML content
+        final contentType = response.headers['content-type'];
+        if (!_isAcceptableContentType(contentType)) {
+          throw Exception('Not an HTML page (Content-Type: ${contentType ?? 'unknown'})');
+        }
 
         // Check response size
         if (response.bodyBytes.length > _maxResponseSize) {

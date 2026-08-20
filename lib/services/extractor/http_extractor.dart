@@ -10,9 +10,31 @@ class HttpExtractor {
   /// Minimum word count to consider extraction successful
   static const int _minWordCount = 200;
 
+  /// File extensions that indicate non-HTML content (not articles)
+  static final _binaryExtensions = {
+    '.mp3', '.mp4', '.wav', '.flac', '.aac', '.ogg', '.ac3', '.wma',
+    '.avi', '.mkv', '.mov', '.wmv', '.webm', '.m4v',
+    '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+    '.zip', '.rar', '.7z', '.tar', '.gz',
+    '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico',
+    '.apk', '.exe', '.dmg', '.deb', '.rpm',
+  };
+
   /// Extract article content from URL using HTTP fetch
   Future<ExtractionResult> extract(String url) async {
     try {
+      // Quick check: reject known binary file extensions
+      final uri = Uri.parse(url);
+      final pathLower = uri.path.toLowerCase();
+      for (final ext in _binaryExtensions) {
+        if (pathLower.endsWith(ext)) {
+          return ExtractionResult(
+            success: false,
+            error: 'Not a webpage (file type: $ext)',
+          );
+        }
+      }
+
       // Fetch HTML with redirect resolution
       final response = await NetworkClient.fetchWithRedirects(url);
       
