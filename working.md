@@ -90,6 +90,37 @@
 3. **Error handling** — Some catch blocks are generic, could be more specific
 4. **WebView extractor** — Returns null on some edge cases (acceptable per spec)
 
+## Real Device Test Results (August 20, 2026)
+
+**Device:** Pixel 3a (Android)
+**App version:** 1.0.0
+
+### ✅ Working
+- App launch, home screen, empty state
+- Add URL dialog (paste URL)
+- Tab switching (All/Unread/Downloaded)
+- Settings screen (storage, version, privacy)
+- Article card display with status badge
+- Retry button on failed articles
+- Search by title/domain
+- Delete article with confirmation
+
+### 🐛 Bugs Found & Fixed
+1. **BUG-1 (Critical): UI doesn't auto-refresh after download**
+   - Status stuck on "Queued" after download completes/fails
+   - Fix: Added StreamSubscription on DownloadQueueManager.progressStream
+   - File: `lib/screens/home/home_screen.dart`
+
+2. **BUG-2 (Medium): Error message lost when WebView fallback returns null**
+   - Shows "Unknown error" instead of original HTTP error
+   - Fix: Preserve httpError before WebView fallback, use as fallback error
+   - File: `lib/services/downloader/download_queue_manager.dart`
+
+3. **BUG-3 (Low): Article title shows raw URL path segment**
+   - e.g., "technology 66402582" instead of "BBC Technology"
+   - Fix: Improved _extractTitleFromUrl with better cleanup
+   - File: `lib/screens/home/home_screen.dart`
+
 ## Next Steps (Priority Order)
 
 ### Immediate (P0 Completion)

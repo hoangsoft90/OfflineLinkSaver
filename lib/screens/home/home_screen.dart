@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../models/article.dart';
 import '../../models/article_status.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   String _searchQuery = '';
   List<Article> _articles = [];
   bool _isLoading = true;
+  StreamSubscription<DownloadProgress>? _downloadSub;
 
   @override
   void initState() {
@@ -34,10 +36,16 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_loadArticles);
     _loadArticles();
+
+    // Listen to download progress and refresh article list
+    _downloadSub = widget.downloadQueue.progressStream.listen((_) {
+      if (mounted) _loadArticles();
+    });
   }
 
   @override
   void dispose() {
+    _downloadSub?.cancel();
     _tabController.dispose();
     _searchController.dispose();
     super.dispose();
@@ -163,13 +171,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   String _extractTitleFromUrl(String url) {
     try {
       final uri = Uri.parse(url);
+      final host = uri.host.replaceFirst('www.', '');
       final path = uri.path;
       if (path.isEmpty || path == '/') {
-        return uri.host;
+        return host;
       }
-      final segments = path.split('/');
-      final lastSegment = segments.lastWhere((s) => s.isNotEmpty, orElse: () => '');
-      return lastSegment.replaceAll('-', ' ').replaceAll('_', ' ');
+      final segments = path.split('/').where((s) => s.isNotEmpty).toList();
+      if (segments.isEmpty) return host;
+      // Use last meaningful segment, clean up
+      final lastSegment = segments.last;
+      final cleaned = lastSegment
+          .replaceAll(RegExp(r'[_-]'), ' ')
+          .replaceAll(RegExp(r'\.(html?|php|aspx?)$'), '');
+      if (cleaned.length < 3) return host;
+      return '$host / $cleaned';
     } catch (e) {
       return url;
     }

@@ -124,15 +124,26 @@ class DownloadQueueManager {
       // If HTTP fails, try WebView fallback
       if (!result.success && result.needsWebView) {
         _emitProgress(articleId, 'Trying alternative method...');
+        final httpError = result.error; // Preserve HTTP error for fallback
         
         try {
           await _webViewSemaphore.acquire();
-          result = await _webViewExtractor.extract(article.originalUrl);
+          final webViewResult = await _webViewExtractor.extract(article.originalUrl);
           _webViewSemaphore.release();
+          
+          if (webViewResult != null) {
+            result = webViewResult;
+          } else {
+            // WebView returned null - keep original HTTP error
+            result = ExtractionResult(
+              success: false,
+              error: httpError ?? 'WebView extraction failed',
+            );
+          }
         } catch (e) {
           result = ExtractionResult(
             success: false,
-            error: e.toString(),
+            error: httpError ?? e.toString(),
           );
         }
       }
