@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThinkSave — Hướng dẫn sử dụng</title>
+  <style>
+    :root {
+      --blue: #1E64DC;
+      --blue-light: #2D6EEB;
+      --green: #38B464;
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --text: #1E293B;
+      --text-secondary: #64748B;
+      --border: #E2E8F0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      color: white;
+      padding: 60px 24px 48px;
+      text-align: center;
+    }
+    .hero .icon { font-size: 64px; margin-bottom: 16px; }
+    .hero h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .hero p { font-size: 16px; opacity: 0.9; max-width: 500px; margin: 0 auto; }
+
+    /* ── Container ── */
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 20px 60px; }
+
+    /* ── Section ── */
+    .section {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+    }
+    .section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section h2 .emoji { font-size: 24px; }
+
+    /* ── Steps ── */
+    .steps { list-style: none; counter-reset: step; }
+    .steps li {
+      counter-increment: step;
+      padding: 12px 0 12px 48px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .steps li:last-child { border-bottom: none; }
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0; top: 12px;
+      width: 32px; height: 32px;
+      background: var(--blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .steps li strong { color: var(--blue); }
+
+    /* ── Feature grid ── */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .feature {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .feature .icon { font-size: 32px; margin-bottom: 8px; }
+    .feature .title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .feature .desc { font-size: 13px; color: var(--text-secondary); }
+
+    /* ── Tips ── */
+    .tip {
+      background: #EFF6FF;
+      border-left: 4px solid var(--blue);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+    .tip.warn {
+      background: #FEF3C7;
+      border-left-color: #F59E0B;
+    }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th { font-weight: 600; color: var(--text-secondary); font-size: 13px; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-green { background: #DCFCE7; color: #166534; }
+    .badge-blue { background: #DBEAFE; color: #1E40AF; }
+    .badge-red { background: #FEE2E2; color: #991B1B; }
+    .badge-yellow { background: #FEF3C7; color: #92400E; }
+    .badge-gray { background: #F1F5F9; color: #475569; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    .footer a { color: var(--blue); text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 26px; }
+      .features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="icon">🔖</div>
+  <h1>ThinkSave</h1>
+  <p>Lưu liên kết từ bất kỳ ứng dụng nào — đọc offline với trải nghiệm sạch sẽ</p>
+</div>
+
+<div class="container">
+
+  <!-- ═══ 1. Bắt đầu ═══ -->
+  <div class="section">
+    <h2><span class="emoji">🚀</span> Bắt đầu sử dụng</h2>
+    <ol class="steps">
+      <li>
+        <strong>Tải & cài đặt</strong> ThinkSave từ Google Play Store (Android) hoặc App Store (iOS).
+      </li>
+      <li>
+        <strong>Mở app</strong> — màn hình chính hiển thị danh sách bài viết (trống nếu chưa lưu gì).
+      </li>
+      <li>
+        <strong>Lưu bài viết đầu tiên</strong> — có 2 cách:
+        <ul style="margin-top:8px; padding-left:20px;">
+          <li><strong>Cách 1 — Share từ trình duyệt:</strong> Mở bài viết trên Chrome/Facebook/Telegram → nhấn nút <em>Share</em> → chọn <em>ThinkSave</em>.</li>
+          <li><strong>Cách 2 — Paste URL:</strong> Nhấn nút <strong>+</strong> (góc phải dưới) → dán link → nhấn <em>Save</em>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Đợi tải xuống</strong> — app sẽ tự động tải nội dung bài viết để đọc offline. Trạng thái hiển thị trên thẻ bài viết.
+      </li>
+      <li>
+        <strong>Đọc bài viết</strong> — nhấn vào thẻ bài viết đã tải xong (màu xanh <span class="badge badge-green">Ready</span>) để mở chế độ đọc.
+      </li>
+    </ol>
+  </div>
+
+  <!-- ═══ 2. Các tính năng chính ═══ -->
+  <div class="section">
+    <h2><span class="emoji">✨</span> Các tính năng chính</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="icon">🔗</div>
+        <div class="title">Lưu từ mọi app</div>
+        <div class="desc">Share link từ Chrome, Facebook, Telegram, Twitter… vào ThinkSave</div>
+      </div>
+      <div class="feature">
+        <div class="icon">📴</div>
+        <div class="title">Đọc offline</div>
+        <div class="desc">Nội dung được tải về thiết bị — đọc mọi lúc, mọi nơi</div>
+      </div>
+      <div class="feature">
+        <div class="icon">📖</div>
+        <div class="title">Reader sạch sẽ</div>
+        <div class="desc">Loại bỏ quảng cáo, navigation, giữ lại nội dung thuần túy</div>
+      </div>
+      <div class="feature">
+        <div class="icon">🌙</div>
+        <div class="title">3 chế độ nền</div>
+        <div class="desc">Sáng / Tối / Sepia — chọn theo sở thích</div>
+      </div>
+      <div class="feature">
+        <div class="icon">🔤</div>
+        <div class="title">Điều chỉnh cỡ chữ</div>
+        <div class="desc">Slider từ 12px đến 24px, phù hợp mọi lứa tuổi</div>
+      </div>
+      <div class="feature">
+        <div class="icon">📍</div>
+        <div class="title">Ghi nhớ vị trí đọc</div>
+        <div class="desc">Tự động lưu và khôi phục vị trí cuộn khi mở lại</div>
+      </div>
+      <div class="feature">
+        <div class="icon">🔍</div>
+        <div class="title">Tìm kiếm nhanh</div>
+        <div class="desc">Tìm bài viết theo tên hoặc tên miền</div>
+      </div>
+      <div class="feature">
+        <div class="icon">❤️</div>
+        <div class="title">Yêu thích</div>
+        <div class="desc">Đánh dấu bài viết quan trọng để dễ tìm lại</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 3. Hướng dẫn chi tiết ═══ -->
+  <div class="section">
+    <h2><span class="emoji">📱</span> Hướng dẫn chi tiết</h2>
+
+    <h3 style="margin: 16px 0 8px; font-size: 16px;">Cách 1: Share từ ứng dụng khác</h3>
+    <ol class="steps">
+      <li>Mở bài viết bạn muốn lưu trên trình duyệt hoặc mạng xã hội.</li>
+      <li>Nhấn nút <strong>Share</strong> (📤) trên thanh công cụ.</li>
+      <li>Trong danh sách ứng dụng, chọn <strong>ThinkSave</strong>.</li>
+      <li>App sẽ tự động lưu link và bắt đầu tải xuống.</li>
+      <li>Thông báo xác nhận <em>✓ Saved</em> sẽ hiển thị.</li>
+    </ol>
+
+    <h3 style="margin: 20px 0 8px; font-size: 16px;">Cách 2: Paste URL thủ công</h3>
+    <ol class="steps">
+      <li>Trên màn hình chính, nhấn nút <strong>+</strong> (Floating Action Button).</li>
+      <li>Hộp thoại <em>Add URL</em> hiện ra — dán link vào ô nhập.</li>
+      <li>Nhấn <strong>Save</strong>.</li>
+      <li>Article sẽ xuất hiện trong danh sách với trạng thái <span class="badge badge-yellow">Queued</span>.</li>
+    </ol>
+
+    <h3 style="margin: 20px 0 8px; font-size: 16px;">Đọc bài viết</h3>
+    <ol class="steps">
+      <li>Nhấn vào thẻ bài viết có trạng thái <span class="badge badge-green">Ready</span>.</li>
+      <li>Trình đọc mở ra với nội dung đã được làm sạch.</li>
+      <li>Sử dụng thanh công cụ底部 để:
+        <ul style="margin-top:6px; padding-left:20px;">
+          <li>Đổi <strong>chế độ nền</strong> (Sáng / Tối / Sepia)</li>
+          <li>Điều chỉnh <strong>cỡ chữ</strong> (slider)</li>
+          <li><strong>Yêu thích</strong>, <strong>Chia sẻ</strong>, hoặc <strong>Xóa</strong> bài viết</li>
+        </ul>
+      </li>
+      <li>Vị trí đọc được <strong>tự động lưu</strong> — mở lại sẽ tiếp tục từ chỗ cũ.</li>
+    </ol>
+  </div>
+
+  <!-- ═══ 4. Trạng thái bài viết ═══ -->
+  <div class="section">
+    <h2><span class="emoji">📊</span> Hiểu trạng thái bài viết</h2>
+    <table>
+      <thead>
+        <tr><th>Trạng thái</th><th>Ý nghĩa</th><th>Hành động</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-gray">Queued</span></td>
+          <td>Đang chờ tải xuống</td>
+          <td>Đợi hoặc nhấn Retry nếu chờ lâu</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">Downloading</span></td>
+          <td>Đang tải nội dung</td>
+          <td>Đợi quá trình hoàn tất</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-green">Ready</span></td>
+          <td>Đã tải xong — đọc offline được</td>
+          <td>Nhấn để đọc</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">Failed</span></td>
+          <td>Tải thất bại (mạng, timeout…)</td>
+          <td>Nhấn <strong>Retry</strong> để thử lại</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-yellow">Online Only</span></td>
+          <td>Không thể tạo bản offline</td>
+          <td>Nhấn để mở link trên trình duyệt</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ 5. Tabs ═══ -->
+  <div class="section">
+    <h2><span class="emoji">📂</span> Quản lý bằng Tabs</h2>
+    <table>
+      <thead>
+        <tr><th>Tab</th><th>Nội dung</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>All</strong></td>
+          <td>Tất cả bài viết, sắp xếp mới nhất lên đầu</td>
+        </tr>
+        <tr>
+          <td><strong>Unread</strong></td>
+          <td>Bài viết chưa đọc</td>
+        </tr>
+        <tr>
+          <td><strong>Downloaded</strong></td>
+          <td>Chỉ bài đã tải xong (sẵn sàng đọc offline)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="tip">
+      💡 <strong>Mẹo:</strong> Nhấn nút <strong>Download All</strong> (⬇️) để tải tất cả bài chưa đọc cùng lúc.
+    </div>
+  </div>
+
+  <!-- ═══ 6. Đa ngôn ngữ ═══ -->
+  <div class="section">
+    <h2><span class="emoji">🌐</span> Đa ngôn ngữ</h2>
+    <p>ThinkSave hỗ trợ 3 ngôn ngữ:</p>
+    <table style="margin-top:12px;">
+      <thead>
+        <tr><th>Ngôn ngữ</th><th>Mã</th><th>Cách chuyển</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>English</td><td>EN</td><td rowspan="3">Settings → Language → Chọn ngôn ngữ</td></tr>
+        <tr><td>Tiếng Việt</td><td>VI</td></tr>
+        <tr><td>简体中文</td><td>ZH</td></tr>
+      </tbody>
+    </table>
+    <div class="tip">
+      💡 Có thể chọn <strong>System default</strong> để tự động theo ngôn ngữ thiết bị.
+    </div>
+  </div>
+
+  <!-- ═══ 7. Mẹo & Thủ thuật ═══ -->
+  <div class="section">
+    <h2><span class="emoji">💡</span> Mẹo & Thủ thuật</h2>
+    <div class="tip">
+      📥 <strong>Tải trước khi đi:</strong> Kết nối WiFi → nhấn <em>Download All</em> → tắt WiFi → đọc offline trên máy bay, tàu xe.
+    </div>
+    <div class="tip">
+      🔍 <strong>Tìm kiếm nhanh:</strong> Gõ tên miền (ví dụ: <code>vnexpress</code>) để lọc bài viết từ một trang cụ thể.
+    </div>
+    <div class="tip">
+      ❤️ <strong>Đánh dấu yêu thích:</strong> Nhấn trái tim trên bài viết hoặc trong trình đọc để lưu vào danh sách yêu thích.
+    </div>
+    <div class="tip">
+      📤 <strong>Chia sẻ lại:</strong> Nhấn nút Share trong trình đọc để gửi link bài viết cho bạn bè.
+    </div>
+    <div class="tip warn">
+      ⚠️ <strong>Lưu ý:</strong> Một trang web sử dụng JavaScript mạnh (SPA) có thể không tải được nội dung đầy đủ. Trong trường hợp này, trạng thái sẽ là <em>Online Only</em> — nhấn để mở trên trình duyệt.
+    </div>
+  </div>
+
+  <!-- ═══ 8. Câu hỏi thường gặp ═══ -->
+  <div class="section">
+    <h2><span class="emoji">❓</span> Câu hỏi thường gặp</h2>
+
+    <details style="margin-bottom:12px;">
+      <summary style="cursor:pointer; font-weight:600; padding:8px 0;">Tại sao bài viết của tôi bị "Failed"?</summary>
+      <p style="padding:8px 0 0 16px; color:var(--text-secondary);">Nguyên nhân phổ biến: kết nối mạng yếu, trang web chặn bot, hoặc nội dung quá lớn. Nhấn <strong>Retry</strong> để thử lại khi có mạng tốt hơn.</p>
+    </details>
+
+    <details style="margin-bottom:12px;">
+      <summary style="cursor:pointer; font-weight:600; padding:8px 0;">App có upload dữ liệu lên cloud không?</summary>
+      <p style="padding:8px 0 0 16px; color:var(--text-secondary);">Không. Tất cả dữ liệu được lưu <strong>trên thiết bị</strong> của bạn. Không có tài khoản, không có đám mây. Dữ liệu hoàn toàn riêng tư.</p>
+    </details>
+
+    <details style="margin-bottom:12px;">
+      <summary style="cursor:pointer; font-weight:600; padding:8px 0;">Tôi có thể lưu video hoặc file không?</summary>
+      <p style="padding:8px 0 0 16px; color:var(--text-secondary);">ThinkSave chỉ lưu <strong>nội dung văn bản và hình ảnh</strong> từ bài viết. Video, file PDF, audio không được hỗ trợ.</p>
+    </details>
+
+    <details style="margin-bottom:12px;">
+      <summary style="cursor:pointer; font-weight:600; padding:8px 0;">Làm thế nào để xóa bài viết?</summary>
+      <p style="padding:8px 0 0 16px; color:var(--text-secondary);">Nhấn giữ thẻ bài viết → chọn <strong>Delete</strong>. Hoặc trong trình đọc, nhấn nút 🗑️ ở thanh công cụ底部.</p>
+    </details>
+
+    <details style="margin-bottom:12px;">
+      <summary style="cursor:pointer; font-weight:600; padding:8px 0;">App có miễn phí không?</summary>
+      <p style="padding:8px 0 0 16px; color:var(--text-secondary);">Có. ThinkSave hoàn toàn miễn phí. Ứng dụng có hiển thị quảng cáo để duy trì hoạt động.</p>
+    </details>
+  </div>
+
+  <!-- ═══ 9. Liên hệ ═══ -->
+  <div class="section">
+    <h2><span class="emoji">📬</span> Liên hệ hỗ trợ</h2>
+    <p>Có câu hỏi hoặc góp ý? Liên hệ qua:</p>
+    <ul style="margin-top:12px; padding-left:20px; color:var(--text-secondary);">
+      <li>Email: <a href="mailto:support@mindsoft.dev" style="color:var(--blue);">support@mindsoft.dev</a></li>
+      <li>GitHub: <a href="https://github.com/hoangsoft90/OfflineLinkSaver/issues" style="color:var(--blue);">github.com/hoangsoft90/OfflineLinkSaver</a></li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>ThinkSave v1.0.0 · Made with ❤️ by <a href="https://mindsoft.dev">MindSoft</a></p>
+  <p style="margin-top:4px;">© 2026 MindSoft. All rights reserved.</p>
+</div>
+
+</body>
+</html>
