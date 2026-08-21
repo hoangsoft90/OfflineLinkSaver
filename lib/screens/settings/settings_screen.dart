@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../../repositories/article_repository.dart';
 import '../../main.dart' show OfflineLinkSaverApp;
@@ -213,16 +214,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ListTile(
                   leading: const Icon(Icons.help_outline),
                   title: Text(l10n.settingsHelp),
-                  onTap: () {
-                    // TODO: Add help screen
-                  },
+                  trailing: const Icon(Icons.open_in_new, size: 18),
+                  onTap: () => launchUrl(
+                    Uri.parse('https://offlinelinksaver.web.app/guide.html'),
+                    mode: LaunchMode.externalApplication,
+                  ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.bug_report_outlined),
                   title: Text(l10n.settingsReportBug),
-                  onTap: () {
-                    // TODO: Add bug report
-                  },
+                  trailing: const Icon(Icons.open_in_new, size: 18),
+                  onTap: () => launchUrl(
+                    Uri.parse('https://play.google.com/store/apps/details?id=com.mindsoft.thinksave'),
+                    mode: LaunchMode.externalApplication,
+                  ),
                 ),
               ],
             ),
