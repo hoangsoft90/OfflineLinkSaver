@@ -354,7 +354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.offlinelinksaver.offline_link_saver;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mindsoft.thinksave;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = .app;
 			};
@@ -370,7 +370,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.offlinelinksaver.offline_link_saver;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mindsoft.thinksave;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = .app;
 			};
@@ -386,7 +386,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.offlinelinksaver.offline_link_saver;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mindsoft.thinksave;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = .app;
 			};

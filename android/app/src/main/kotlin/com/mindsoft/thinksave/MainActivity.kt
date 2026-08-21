@@ -1,4 +1,4 @@
-package com.offlinelinksaver.offline_link_saver
+package com.mindsoft.thinksave
 
 import io.flutter.embedding.android.FlutterActivity
 
