@@ -187,25 +187,27 @@ class DownloadQueueManager {
       // Download images
       await _downloadImages(articleId, sanitizedBlocks, tempDir);
 
-      // Verify content
-      final isValid = await StorageHelper.verifyArticleContent(articleId);
-      if (!isValid) {
-        await _repository.updateArticleStatus(
-          articleId,
-          ArticleStatus.failed,
-          errorMessage: 'Content verification failed',
-        );
-        _finishArticle(articleId);
-        return;
-      }
-
-      // Finalize: rename temp to final directory
+      // Finalize: rename temp to final directory BEFORE verification
+      // BUG FIX: verifyArticleContent checks final path, not .tmp path
       final finalized = await StorageHelper.finalizeArticleDirectory(articleId);
       if (!finalized) {
         await _repository.updateArticleStatus(
           articleId,
           ArticleStatus.failed,
           errorMessage: 'Failed to save content',
+        );
+        _finishArticle(articleId);
+        return;
+      }
+
+      // Verify content (after finalize, file is now at final path)
+      final isValid = await StorageHelper.verifyArticleContent(articleId);
+      if (!isValid) {
+        await StorageHelper.deleteArticleDirectory(articleId);
+        await _repository.updateArticleStatus(
+          articleId,
+          ArticleStatus.failed,
+          errorMessage: 'Content verification failed',
         );
         _finishArticle(articleId);
         return;
