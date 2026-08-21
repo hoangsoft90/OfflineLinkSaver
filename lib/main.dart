@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -54,7 +55,6 @@ void main() async {
     (options) {
       options.dsn = _sentryDsn;
       options.tracesSampleRate = 1.0;
-      options.reportAndroidProguardGuidelines = true;
     },
     appRunner: () => _runApp(),
   );
