@@ -124,9 +124,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         title: Text(AppLocalizations.of(context).addUrlTitle),
         content: TextField(
           controller: urlController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: AppLocalizations.of(context).addUrlHint,
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
           ),
           autofocus: true,
         ),

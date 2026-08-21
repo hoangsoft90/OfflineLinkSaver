@@ -104,7 +104,7 @@ class _OfflineLinkSaverAppState extends State<OfflineLinkSaverApp> {
   /// Reset to system default locale.
   void clearLocale() {
     setState(() => _locale = null);
-    saveLocale(const Locale('')); // empty = system default
+    saveLocale(Locale('')); // empty = system default
   }
 
   @override

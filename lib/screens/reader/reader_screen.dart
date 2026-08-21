@@ -280,7 +280,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   Widget _buildContent() {
     if (_content == null || _content!.blocks.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(AppLocalizations.of(context).readerNoContent),
       );
     }

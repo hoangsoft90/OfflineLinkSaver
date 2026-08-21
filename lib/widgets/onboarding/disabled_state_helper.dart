@@ -84,7 +84,8 @@ class _DisabledStateHelperState extends State<DisabledStateHelper> {
     final size = renderObj.size;
 
     // Position tooltip above the widget
-    final entry = OverlayEntry(
+    late OverlayEntry entry;
+    entry = OverlayEntry(
       builder: (context) => _TooltipOverlay(
         targetTop: offset.dy,
         targetCenter: offset.dx + size.width / 2,
