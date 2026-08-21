@@ -23,9 +23,20 @@ subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 
-// NOTE: Do NOT use projectsEvaluated here — it triggers early evaluation
-// of subprojects and breaks the Flutter Gradle plugin for transitive deps
-// like package_info_plus. JVM targets are set in android/app/build.gradle instead.
+// Force consistent Kotlin JVM target for all subprojects.
+// Only touches KotlinCompile tasks — does NOT set compileSdk or Android compileOptions
+// (which would break subprojects like package_info_plus that lack compileSdk).
+gradle.projectsEvaluated {
+    subprojects { proj ->
+        proj.plugins.withId('kotlin-android') {
+            proj.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = '17'
+                }
+            }
+        }
+    }
+}
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
