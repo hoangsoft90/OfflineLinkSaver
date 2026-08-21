@@ -23,41 +23,9 @@ subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 
-// Force consistent JVM target for all subprojects after configuration.
-gradle.projectsEvaluated {
-    subprojects { proj ->
-        try {
-            // Set Kotlin JVM target for all subprojects that use kotlin-android
-            proj.plugins.withId('kotlin-android') {
-                proj.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-                    kotlinOptions {
-                        jvmTarget = '17'
-                    }
-                }
-            }
-            // Set Java compile options for Android application projects
-            proj.plugins.withId('com.android.application') {
-                proj.android {
-                    compileOptions {
-                        sourceCompatibility JavaVersion.VERSION_17
-                        targetCompatibility JavaVersion.VERSION_17
-                    }
-                }
-            }
-            // Set Java compile options for Android library projects
-            proj.plugins.withId('com.android.library') {
-                proj.android {
-                    compileOptions {
-                        sourceCompatibility JavaVersion.VERSION_17
-                        targetCompatibility JavaVersion.VERSION_17
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Skip subprojects that fail during evaluation (e.g. missing compileSdk)
-        }
-    }
-}
+// NOTE: Do NOT use projectsEvaluated here — it triggers early evaluation
+// of subprojects and breaks the Flutter Gradle plugin for transitive deps
+// like package_info_plus. JVM targets are set in android/app/build.gradle instead.
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
