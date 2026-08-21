@@ -89,7 +89,6 @@ class ShareHandler {
       final isDuplicate = existingArticles.any((a) => a.canonicalUrl == canonicalUrl);
       if (isDuplicate) {
         final existing = existingArticles.firstWhere((a) => a.canonicalUrl == canonicalUrl);
-        final existing = existingArticles.first;
         _shareController.add(ShareEvent(
           success: false,
           message: 'Already saved on ${_formatDate(existing.createdAt)}',
