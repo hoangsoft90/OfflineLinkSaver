@@ -143,7 +143,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
       appBar: AppBar(
         title: Text(l10n.settingsTitle),
       ),
@@ -224,7 +226,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-    );
+    ),
+    ); // end WillPopScope
   }
 
   Widget _buildSectionHeader(String title) {

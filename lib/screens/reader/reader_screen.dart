@@ -210,7 +210,20 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        // Save reading progress before leaving
+        if (_scrollController.hasClients &&
+            _scrollController.position.maxScrollExtent > 0 &&
+            !_scrollController.position.maxScrollExtent.isInfinite) {
+          final progress = (_scrollController.offset /
+                  _scrollController.position.maxScrollExtent)
+              .clamp(0.0, 1.0);
+          await widget.repository.updateReadingProgress(_article.id, progress);
+        }
+        return true;
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Text(
           _article.title,
@@ -272,7 +285,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
             ),
         ],
       ),
-    );
+    ),
+    ); // end WillPopScope
   }
 
   Widget _buildErrorState() {

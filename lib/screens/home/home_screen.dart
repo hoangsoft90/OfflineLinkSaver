@@ -332,6 +332,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       flowId: 'home_v1',
       state: _onboardingState,
       steps: onboardingSteps,
+      child: WillPopScope(
+      onWillPop: () async {
+        // If search is active, clear it first instead of exiting
+        if (_searchQuery.isNotEmpty) {
+          _searchController.clear();
+          setState(() => _searchQuery = '');
+          _loadArticles();
+          return false; // Don't exit, just clear search
+        }
+        // If on a non-first tab, go to first tab instead of exiting
+        if (_tabController.index != 0) {
+          _tabController.animateTo(0);
+          return false;
+        }
+        return true; // Exit app on double-back from first tab
+      },
       child: Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).appTitle),
@@ -491,6 +507,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ],
       ),
     ),
+    ), // end WillPopScope
     ); // end OnboardingCoordinator
   }
 

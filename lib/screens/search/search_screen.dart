@@ -53,7 +53,16 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        if (_searchController.text.isNotEmpty) {
+          _searchController.clear();
+          setState(() => _results = []);
+          return false; // Don't exit, just clear search
+        }
+        return true;
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: TextField(
           controller: _searchController,
@@ -109,6 +118,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     );
                   },
                 ),
-    );
+    ),
+    ); // end WillPopScope
   }
 }
