@@ -205,6 +205,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   subtitle: Text(
                     l10n.settingsPrivacyText,
                   ),
+                  trailing: const Icon(Icons.open_in_new, size: 18),
+                  onTap: () => launchUrl(
+                    Uri.parse('https://hoangsoft90.github.io/OfflineLinkSaver/privacy-policy.html'),
+                    mode: LaunchMode.externalApplication,
+                  ),
                 ),
 
                 const Divider(),
