@@ -79,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   void _loadBannerAd() {
     _bannerAd = AdService.instance.createBannerAd(
+      tag: 'home',
       size: AdSize.banner,
       onAdLoaded: (_) {
         if (mounted) setState(() => _isBannerAdLoaded = true);
@@ -446,12 +447,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       ),
           ),
 
-          // ── Banner Ad ──
+          // ── Banner Ad (safe from bottom nav buttons) ──
           if (_isBannerAdLoaded && _bannerAd != null)
-            SizedBox(
-              width: _bannerAd!.size.width.toDouble(),
-              height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
+            SafeArea(
+              top: false,
+              child: Center(
+                child: SizedBox(
+                  width: _bannerAd!.size.width.toDouble(),
+                  height: _bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                ),
+              ),
             ),
         ],
       ),

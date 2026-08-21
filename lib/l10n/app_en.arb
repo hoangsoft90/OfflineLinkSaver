@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
 
-  "appTitle": "Offline Link Saver",
+  "appTitle": "ThinkSave",
   "@appTitle": { "description": "App title shown in AppBar" },
 
   "homeTabAll": "All",
@@ -49,7 +49,7 @@
   },
   "readerOpenInBrowser": "Open in Browser",
   "readerNoContent": "No content available",
-  "readerFooter": "Saved with Offline Link Saver",
+  "readerFooter": "Saved with ThinkSave",
 
   "settingsTitle": "Settings",
   "settingsStorage": "Storage",

@@ -1,7 +1,7 @@
 {
   "@@locale": "zh",
 
-  "appTitle": "Offline Link Saver",
+  "appTitle": "ThinkSave",
   "homeTabAll": "全部",
   "homeTabUnread": "未读",
   "homeTabDownloaded": "已下载",
@@ -27,7 +27,7 @@
   "readerFailedToLoad": "加载内容失败：{error}",
   "readerOpenInBrowser": "在浏览器中打开",
   "readerNoContent": "没有可用内容",
-  "readerFooter": "通过 Offline Link Saver 保存",
+  "readerFooter": "通过 ThinkSave 保存",
   "settingsTitle": "设置",
   "settingsStorage": "存储",
   "settingsTotalArticles": "文章总数",

@@ -1,7 +1,7 @@
 {
   "@@locale": "vi",
 
-  "appTitle": "Offline Link Saver",
+  "appTitle": "ThinkSave",
 
   "homeTabAll": "Tất cả",
   "homeTabUnread": "Chưa đọc",
@@ -33,7 +33,7 @@
   "readerFailedToLoad": "Không thể tải nội dung: {error}",
   "readerOpenInBrowser": "Mở trong trình duyệt",
   "readerNoContent": "Không có nội dung",
-  "readerFooter": "Đã lưu với Offline Link Saver",
+  "readerFooter": "Đã lưu với ThinkSave",
 
   "settingsTitle": "Cài đặt",
   "settingsStorage": "Bộ nhớ",

@@ -183,7 +183,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 // ── English strings ──
 
 const Map<String, String> _en = {
-  'appTitle': 'Offline Link Saver',
+  'appTitle': 'ThinkSave',
   'homeTabAll': 'All',
   'homeTabUnread': 'Unread',
   'homeTabDownloaded': 'Downloaded',
@@ -209,7 +209,7 @@ const Map<String, String> _en = {
   'readerFailedToLoad': 'Failed to load content: {error}',
   'readerOpenInBrowser': 'Open in Browser',
   'readerNoContent': 'No content available',
-  'readerFooter': 'Saved with Offline Link Saver',
+  'readerFooter': 'Saved with ThinkSave',
   'settingsTitle': 'Settings',
   'settingsStorage': 'Storage',
   'settingsTotalArticles': 'Total Articles',
@@ -248,7 +248,7 @@ const Map<String, String> _en = {
 // ── Vietnamese strings ──
 
 const Map<String, String> _vi = {
-  'appTitle': 'Offline Link Saver',
+  'appTitle': 'ThinkSave',
   'homeTabAll': 'Tất cả',
   'homeTabUnread': 'Chưa đọc',
   'homeTabDownloaded': 'Đã tải',
@@ -274,7 +274,7 @@ const Map<String, String> _vi = {
   'readerFailedToLoad': 'Không thể tải nội dung: {error}',
   'readerOpenInBrowser': 'Mở trong trình duyệt',
   'readerNoContent': 'Không có nội dung',
-  'readerFooter': 'Đã lưu với Offline Link Saver',
+  'readerFooter': 'Đã lưu với ThinkSave',
   'settingsTitle': 'Cài đặt',
   'settingsStorage': 'Bộ nhớ',
   'settingsTotalArticles': 'Tổng số bài viết',
@@ -313,7 +313,7 @@ const Map<String, String> _vi = {
 // ── Chinese (Simplified) strings ──
 
 const Map<String, String> _zh = {
-  'appTitle': 'Offline Link Saver',
+  'appTitle': 'ThinkSave',
   'homeTabAll': '全部',
   'homeTabUnread': '未读',
   'homeTabDownloaded': '已下载',
@@ -339,7 +339,7 @@ const Map<String, String> _zh = {
   'readerFailedToLoad': '加载内容失败：{error}',
   'readerOpenInBrowser': '在浏览器中打开',
   'readerNoContent': '没有可用内容',
-  'readerFooter': '通过 Offline Link Saver 保存',
+  'readerFooter': '通过 ThinkSave 保存',
   'settingsTitle': '设置',
   'settingsStorage': '存储',
   'settingsTotalArticles': '文章总数',

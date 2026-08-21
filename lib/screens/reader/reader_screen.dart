@@ -50,6 +50,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   void _loadBannerAd() {
     _bannerAd = AdService.instance.createBannerAd(
+      tag: 'reader',
       size: AdSize.banner,
       onAdLoaded: (_) {
         if (mounted) setState(() => _isBannerAdLoaded = true);
@@ -242,12 +243,17 @@ class _ReaderScreenState extends State<ReaderScreen> {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ── Banner Ad ──
+          // ── Banner Ad (safe from bottom nav buttons) ──
           if (_isBannerAdLoaded && _bannerAd != null)
-            SizedBox(
-              width: _bannerAd!.size.width.toDouble(),
-              height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
+            SafeArea(
+              top: false,
+              child: Center(
+                child: SizedBox(
+                  width: _bannerAd!.size.width.toDouble(),
+                  height: _bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                ),
+              ),
             ),
           if (_content != null)
             ReaderControls(

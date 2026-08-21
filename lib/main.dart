@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
+import 'core/ads/ads_config.dart';
 import 'core/ads/ad_service.dart';
 import 'core/database/database_helper.dart';
 import 'repositories/article_repository.dart';
@@ -33,6 +34,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Google Mobile Ads SDK
+  AdsConfig.logConfig();
   await MobileAds.instance.initialize();
   // Pre-load interstitial for later use
   AdService.instance.loadInterstitialAd();
@@ -117,7 +119,7 @@ class _OfflineLinkSaverAppState extends State<OfflineLinkSaverApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Offline Link Saver',
+      title: 'ThinkSave',
       debugShowCheckedModeBanner: false,
 
       // ── Localization ──
