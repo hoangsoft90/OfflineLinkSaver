@@ -26,17 +26,17 @@ subprojects {
 // Force consistent JVM target for all subprojects after configuration.
 gradle.projectsEvaluated {
     subprojects { proj ->
-        // Set Kotlin JVM target for all subprojects that use kotlin-android
-        proj.plugins.withId('kotlin-android') {
-            proj.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-                kotlinOptions {
-                    jvmTarget = '17'
+        try {
+            // Set Kotlin JVM target for all subprojects that use kotlin-android
+            proj.plugins.withId('kotlin-android') {
+                proj.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                    kotlinOptions {
+                        jvmTarget = '17'
+                    }
                 }
             }
-        }
-        // Set Java compile options for Android projects (only if compileSdk is set)
-        proj.plugins.withId('com.android.application') {
-            if (proj.android.hasProperty('compileSdkVersion') || proj.android.hasProperty('compileSdk')) {
+            // Set Java compile options for Android application projects
+            proj.plugins.withId('com.android.application') {
                 proj.android {
                     compileOptions {
                         sourceCompatibility JavaVersion.VERSION_17
@@ -44,9 +44,8 @@ gradle.projectsEvaluated {
                     }
                 }
             }
-        }
-        proj.plugins.withId('com.android.library') {
-            if (proj.android.hasProperty('compileSdkVersion') || proj.android.hasProperty('compileSdk')) {
+            // Set Java compile options for Android library projects
+            proj.plugins.withId('com.android.library') {
                 proj.android {
                     compileOptions {
                         sourceCompatibility JavaVersion.VERSION_17
@@ -54,6 +53,8 @@ gradle.projectsEvaluated {
                     }
                 }
             }
+        } catch (Exception e) {
+            // Skip subprojects that fail during evaluation (e.g. missing compileSdk)
         }
     }
 }
