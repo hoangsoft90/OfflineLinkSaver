@@ -19,7 +19,7 @@ class AdsConfig {
 
   // ── Ad Unit IDs ─────────────────────────────────────────────────────
 
-  // Test IDs — always return ads, safe for development.
+  // ── Test IDs (Google official) ──
   static const Map<String, String> _testBannerAndroid = {
     'adUnitId': 'ca-app-pub-3940256099942544/6300978111',
   };
@@ -33,34 +33,50 @@ class AdsConfig {
     'adUnitId': 'ca-app-pub-3940256099942544/4411468910',
   };
 
-  // Production IDs — TODO: replace with your real AdMob ad unit IDs.
+  // ── Production IDs (real AdMob account) ──
   static const Map<String, String> _prodBannerAndroid = {
-    'adUnitId': 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX',
+    'adUnitId': 'ca-app-pub-6917313063209470/3645357226',
   };
   static const Map<String, String> _prodBannerIos = {
-    'adUnitId': 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX',
+    'adUnitId': 'ca-app-pub-3940256099942544/2934735716', // TODO: replace with real iOS banner ID
   };
   static const Map<String, String> _prodInterstitialAndroid = {
-    'adUnitId': 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX',
+    'adUnitId': 'ca-app-pub-6917313063209470/3708936406',
   };
   static const Map<String, String> _prodInterstitialIos = {
-    'adUnitId': 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX',
+    'adUnitId': 'ca-app-pub-3940256099942544/4411468910', // TODO: replace with real iOS interstitial ID
+  };
+
+  // ── Rewarded Ads ──
+
+  static const Map<String, String> _testRewardedAndroid = {
+    'adUnitId': 'ca-app-pub-3940256099942544/5224354917',
+  };
+  static const Map<String, String> _testRewardedIos = {
+    'adUnitId': 'ca-app-pub-3940256099942544/1712485313',
+  };
+  static const Map<String, String> _prodRewardedAndroid = {
+    'adUnitId': 'ca-app-pub-6917313063209470/6079948874',
+  };
+  static const Map<String, String> _prodRewardedIos = {
+    'adUnitId': 'ca-app-pub-3940256099942544/1712485313', // TODO: replace with real iOS rewarded ID
   };
 
   // ── App IDs (required by platform manifests) ────────────────────────
 
-  static const String androidAppId = 'ca-app-pub-3940256099942544~3347511713';
-  static const String iosAppId = 'ca-app-pub-3940256099942544~1458002511';
+  static const String androidAppId = 'ca-app-pub-6917313063209470~9608130345';
+  static const String iosAppId = 'ca-app-pub-6917313063209470~9608130345';
 
   // ── Cooldown Settings ───────────────────────────────────────────────
 
   /// Minimum gap between interstitial shows (in seconds).
-  /// Prevents spamming the user with full-screen ads.
   static const int interstitialCooldownSeconds = 60;
 
-  /// Minimum gap between banner refreshes is handled by the SDK;
-  /// this controls how often we *create* new banner instances in Flutter.
+  /// Minimum gap between banner refreshes (in seconds).
   static const int bannerRefreshCooldownSeconds = 120;
+
+  /// Minimum gap between rewarded shows (in seconds).
+  static const int rewardedCooldownSeconds = 120;
 
   // ── Convenience Getters ─────────────────────────────────────────────
 
@@ -86,12 +102,24 @@ class AdsConfig {
     return '';
   }
 
+  static String get rewardedAdUnitId {
+    if (testAds) {
+      if (Platform.isAndroid) return _testRewardedAndroid['adUnitId']!;
+      if (Platform.isIOS) return _testRewardedIos['adUnitId']!;
+    } else {
+      if (Platform.isAndroid) return _prodRewardedAndroid['adUnitId']!;
+      if (Platform.isIOS) return _prodRewardedIos['adUnitId']!;
+    }
+    return '';
+  }
+
   // ── Debug Logging ───────────────────────────────────────────────────
 
   static void logConfig() {
     debugPrint('[AdsConfig] testAds=$testAds');
     debugPrint('[AdsConfig] banner=$bannerAdUnitId');
     debugPrint('[AdsConfig] interstitial=$interstitialAdUnitId');
-    debugPrint('[AdsConfig] cooldown=${interstitialCooldownSeconds}s');
+    debugPrint('[AdsConfig] rewarded=$rewardedAdUnitId');
+    debugPrint('[AdsConfig] cooldown: interstitial=${interstitialCooldownSeconds}s, rewarded=${rewardedCooldownSeconds}s');
   }
 }
