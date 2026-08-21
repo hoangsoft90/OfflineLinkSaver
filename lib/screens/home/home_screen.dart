@@ -463,48 +463,51 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       ),
           ),
 
-          // ── Banner Ad (safe from bottom nav buttons) ──
-          if (_isBannerAdLoaded && _bannerAd != null)
-            SafeArea(
-              top: false,
-              child: Center(
-                child: SizedBox(
-                  width: _bannerAd!.size.width.toDouble(),
-                  height: _bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: _bannerAd!),
-                ),
-              ),
-            ),
         ],
       ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Download All Unread FAB
-          FeatureBadge(
-            key: _downloadAllKey,
-            visible: true,
-            label: AppLocalizations.of(context).badgeNew,
-            variant: BadgeVariant.label,
-            child: FloatingActionButton.small(
-              onPressed: _downloadAllUnread,
-              heroTag: 'download_all',
-              child: const Icon(Icons.download),
+      // ── Banner Ad in bottomNavigationBar (auto safe area) ──
+      bottomNavigationBar: (_isBannerAdLoaded && _bannerAd != null)
+          ? SafeArea(
+              top: false,
+              child: SizedBox(
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd!),
+              ),
+            )
+          : null,
+      floatingActionButton: Padding(
+        // Push FABs up above the banner (50px banner + 8px safe area padding)
+        padding: const EdgeInsets.only(bottom: 58),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Download All Unread FAB
+            FeatureBadge(
+              key: _downloadAllKey,
+              visible: true,
+              label: AppLocalizations.of(context).badgeNew,
+              variant: BadgeVariant.label,
+              child: FloatingActionButton.small(
+                onPressed: _downloadAllUnread,
+                heroTag: 'download_all',
+                child: const Icon(Icons.download),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          // Add URL FAB
-          FeatureBadge(
-            key: _addUrlKey,
-            visible: true,
-            variant: BadgeVariant.dot,
-            child: FloatingActionButton(
-              onPressed: _showAddUrlDialog,
-              heroTag: 'add_url',
-              child: const Icon(Icons.add),
+            const SizedBox(height: 8),
+            // Add URL FAB
+            FeatureBadge(
+              key: _addUrlKey,
+              visible: true,
+              variant: BadgeVariant.dot,
+              child: FloatingActionButton(
+                onPressed: _showAddUrlDialog,
+                heroTag: 'add_url',
+                child: const Icon(Icons.add),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
     ), // end WillPopScope
