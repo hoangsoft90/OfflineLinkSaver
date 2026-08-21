@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
+import 'core/ads/ad_service.dart';
 import 'core/database/database_helper.dart';
 import 'repositories/article_repository.dart';
 import 'services/downloader/download_queue_manager.dart';
@@ -29,6 +31,11 @@ Future<void> saveLocale(Locale locale) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Google Mobile Ads SDK
+  await MobileAds.instance.initialize();
+  // Pre-load interstitial for later use
+  AdService.instance.loadInterstitialAd();
 
   // Load persisted locale before building UI
   final savedLocale = await _loadSavedLocale();

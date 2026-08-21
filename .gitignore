@@ -60,3 +60,4 @@ app.*.map.json
 # Exceptions
 !/ios/Pods/**/Pods-Bridging-Header.h
 android/local.properties
+google-services.json

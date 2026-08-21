@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../core/ads/ad_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/onboarding/onboarding_state.dart';
 import '../../core/onboarding/onboarding_step.dart';
@@ -37,6 +39,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   bool _isDisposed = false;
   final OnboardingState _onboardingState = OnboardingState();
 
+  // ── AdMob ──
+  BannerAd? _bannerAd;
+  bool _isBannerAdLoaded = false;
+
   // GlobalKeys for onboarding target widgets
   final GlobalKey _addUrlKey = GlobalKey();
   final GlobalKey _downloadAllKey = GlobalKey();
@@ -45,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
+    _loadBannerAd();
     _tabController = TabController(length: 3, vsync: this);
     // BUG 5: Only reload when tab animation settles, not on every index change
     _tabController.animation?.addListener(() {
@@ -70,10 +77,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     await _onboardingState.init();
   }
 
+  void _loadBannerAd() {
+    _bannerAd = AdService.instance.createBannerAd(
+      size: AdSize.banner,
+      onAdLoaded: (_) {
+        if (mounted) setState(() => _isBannerAdLoaded = true);
+      },
+    )..load();
+  }
+
   @override
   void dispose() {
     _isDisposed = true;
     _downloadSub?.cancel();
+    _bannerAd?.dispose();
     _tabController.dispose();
     _searchController.dispose();
     super.dispose();
@@ -388,15 +405,34 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             return ArticleCard(
                               article: article,
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ReaderScreen(
-                                      article: article,
-                                      repository: widget.repository,
-                                    ),
-                                  ),
+                                // Show interstitial ad before opening reader
+                                final shown = AdService.instance.showInterstitialAd(
+                                  onDismissed: () {
+                                    if (mounted) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ReaderScreen(
+                                            article: article,
+                                            repository: widget.repository,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 );
+                                // If ad wasn't ready, navigate immediately
+                                if (!shown) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReaderScreen(
+                                        article: article,
+                                        repository: widget.repository,
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
                               onDelete: () => _deleteArticle(article),
                               onRetry: () => _retryDownload(article),
@@ -409,6 +445,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         ),
                       ),
           ),
+
+          // ── Banner Ad ──
+          if (_isBannerAdLoaded && _bannerAd != null)
+            SizedBox(
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            ),
         ],
       ),
       floatingActionButton: Column(
