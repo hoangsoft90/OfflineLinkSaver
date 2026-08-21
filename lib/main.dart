@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'core/ads/ads_config.dart';
@@ -15,12 +16,15 @@ import 'screens/home/home_screen.dart';
 /// SharedPreferences key for persisted locale choice.
 const String _kLocalePrefKey = 'app_locale';
 
+/// Sentry DSN — get yours at https://sentry.io
+const String _sentryDsn =
+    'https://b8ff5f1d968fe812b3e07f8d7ba51527@o4505474077753344.ingest.us.sentry.io/4511947859820544';
+
 /// Returns the user's saved locale, or null to follow the system default.
 Future<Locale?> _loadSavedLocale() async {
   final prefs = await SharedPreferences.getInstance();
   final code = prefs.getString(_kLocalePrefKey);
   if (code == null || code.isEmpty) return null;
-  // Support "en", "vi", etc.
   return Locale(code);
 }
 
@@ -33,17 +37,39 @@ Future<void> saveLocale(Locale locale) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // ── Flutter framework errors → Sentry ──
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    Sentry.captureException(details.exception, stackTrace: details.stack);
+  };
+
+  // ── Dart async errors (uncaught exceptions in zones) → Sentry ──
+  PlatformDispatcher.instance.onError = (error, stack) {
+    Sentry.captureException(error, stackTrace: stack);
+    return true;
+  };
+
+  // ── Sentry init (wraps appRunner in its own error zone) ──
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = _sentryDsn;
+      options.tracesSampleRate = 1.0;
+      options.reportAndroidProguardGuidelines = true;
+    },
+    appRunner: () => _runApp(),
+  );
+}
+
+Future<void> _runApp() async {
   // Initialize Google Mobile Ads SDK
   AdsConfig.logConfig();
   await MobileAds.instance.initialize();
-  // Pre-load interstitial for later use
   AdService.instance.loadInterstitialAd();
 
-  // Load persisted locale before building UI
+  // Load persisted locale
   final savedLocale = await _loadSavedLocale();
 
-  // Run startup sanitization before building UI
-  // This resets any stuck downloads from previous sessions
+  // Startup sanitization
   final db = await DatabaseHelper.database;
   await DatabaseHelper.startupSanitization(db);
 
@@ -54,8 +80,6 @@ void main() async {
     repository: repository,
     downloadQueue: downloadQueue,
   );
-
-  // Initialize share handler for Android
   shareHandler.initialize();
 
   // Set preferred orientations
@@ -86,7 +110,6 @@ class OfflineLinkSaverApp extends StatefulWidget {
     this.initialLocale,
   });
 
-  /// Access state from anywhere via [OfflineLinkSaverApp.of(context)].
   static _OfflineLinkSaverAppState of(BuildContext context) {
     return context.findAncestorStateOfType<_OfflineLinkSaverAppState>()!;
   }
@@ -104,16 +127,14 @@ class _OfflineLinkSaverAppState extends State<OfflineLinkSaverApp> {
     _locale = widget.initialLocale;
   }
 
-  /// Change the app locale at runtime.
   void setLocale(Locale locale) {
     setState(() => _locale = locale);
     saveLocale(locale);
   }
 
-  /// Reset to system default locale.
   void clearLocale() {
     setState(() => _locale = null);
-    saveLocale(Locale('')); // empty = system default
+    saveLocale(Locale(''));
   }
 
   @override
