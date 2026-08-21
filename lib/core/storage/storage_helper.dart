@@ -134,12 +134,13 @@ class StorageHelper {
     }
   }
 
-  /// Get available disk space
+  /// Get available disk space (approximate — actual calculation is platform-specific)
+  /// BUG 11: Note: stat.size returns the directory size, NOT available disk space.
+  /// For true available space, platform plugins (e.g. disk_space) are needed.
   static Future<int> getAvailableSpace() async {
     try {
       final appDir = await getApplicationDocumentsDirectory();
       final stat = await appDir.stat();
-      // This is approximate - actual available space calculation is platform-specific
       return stat.size;
     } catch (e) {
       return 0;

@@ -84,9 +84,11 @@ class ShareHandler {
       // Canonicalize URL
       final canonicalUrl = UrlHelper.canonicalizeUrl(resolvedUrl);
 
-      // Check for duplicate
-      final existingArticles = await _repository.searchArticles(canonicalUrl);
-      if (existingArticles.isNotEmpty) {
+      // BUG 6: Use exact match instead of LIKE query for duplicate detection
+      final existingArticles = await _repository.getArticles();
+      final isDuplicate = existingArticles.any((a) => a.canonicalUrl == canonicalUrl);
+      if (isDuplicate) {
+        final existing = existingArticles.firstWhere((a) => a.canonicalUrl == canonicalUrl);
         final existing = existingArticles.first;
         _shareController.add(ShareEvent(
           success: false,

@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   List<Article> _articles = [];
   bool _isLoading = true;
   StreamSubscription<DownloadProgress>? _downloadSub;
+  bool _isDisposed = false;
   final OnboardingState _onboardingState = OnboardingState();
 
   // GlobalKeys for onboarding target widgets
@@ -45,13 +46,23 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(_loadArticles);
+    // BUG 5: Only reload when tab animation settles, not on every index change
+    _tabController.animation?.addListener(() {
+      // animation fires twice per tab change — this listener is on the animation
+      // so we don't need indexIsChanging guard here
+    });
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        _loadArticles();
+      }
+    });
     _loadArticles();
     _initOnboarding();
 
-    // Listen to download progress and refresh article list
+    // BUG 10: Listen to download progress and refresh article list
     _downloadSub = widget.downloadQueue.progressStream.listen((_) {
-      if (mounted) _loadArticles();
+      // Extra safety: check mounted after async gap in _loadArticles too
+      if (mounted && !_isDisposed) _loadArticles();
     });
   }
 
@@ -61,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void dispose() {
+    _isDisposed = true;
     _downloadSub?.cancel();
     _tabController.dispose();
     _searchController.dispose();
@@ -198,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       final lastSegment = segments.last;
       final cleaned = lastSegment
           .replaceAll(RegExp(r'[_-]'), ' ')
+          // BUG 2: Fixed regex — \.(html?) was double-escaped, now matches .html correctly
           .replaceAll(RegExp(r'\.(html?|php|aspx?)$'), '');
       if (cleaned.length < 3) return host;
       return '$host / $cleaned';

@@ -42,23 +42,27 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   @override
   void dispose() {
+    _scrollDebounce?.cancel();
     _scrollController.dispose();
     super.dispose();
   }
 
+  // BUG 1+9: Debounced scroll listener that guards against Infinity
+  Timer? _scrollDebounce;
+
   void _setupScrollListener() {
     _scrollController.addListener(() {
-      if (_scrollController.hasClients) {
-        final maxScroll = _scrollController.position.maxScrollExtent;
-        final currentScroll = _scrollController.offset;
-        final progress = currentScroll / maxScroll;
-        
-        // Save reading progress
-        widget.repository.updateReadingProgress(
-          _article.id,
-          progress.clamp(0.0, 1.0),
-        );
-      }
+      if (!_scrollController.hasClients) return;
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      // BUG 1: Guard against Infinity/zero maxScrollExtent
+      if (maxScroll <= 0 || maxScroll.isInfinite) return;
+      final currentScroll = _scrollController.offset;
+      final progress = (currentScroll / maxScroll).clamp(0.0, 1.0);
+      // BUG 9: Debounce — only save after 500ms of no scrolling
+      _scrollDebounce?.cancel();
+      _scrollDebounce = Timer(const Duration(milliseconds: 500), () {
+        widget.repository.updateReadingProgress(_article.id, progress);
+      });
     });
   }
 
@@ -348,18 +352,25 @@ class _ReaderScreenState extends State<ReaderScreen> {
         const SizedBox(height: 16),
 
         // Cover image
+        // BUG 8: Use local file if cover image was downloaded, else network
         if (_article.coverImagePath != null && _article.coverImagePath!.isNotEmpty)
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              _article.coverImagePath!,
-              width: double.infinity,
-              height: 200,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return const SizedBox.shrink();
-              },
-            ),
+            child: _article.coverImagePath!.startsWith('http')
+                ? Image.network(
+                    _article.coverImagePath!,
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  )
+                : Image.file(
+                    File(_article.coverImagePath!),
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
           ),
         const SizedBox(height: 16),
 

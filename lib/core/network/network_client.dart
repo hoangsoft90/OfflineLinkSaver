@@ -18,8 +18,8 @@ class NetworkClient {
     if (contentType == null) return true; // Assume OK if no header (some servers omit it)
     final mime = contentType.split(';').first.trim().toLowerCase();
     // Accept if it's HTML-like or if it's generic/octet (some servers misconfigure)
+    // BUG 7: Only accept HTML-like types, not all text/* (rejects text/css, text/csv etc.)
     return _allowedContentTypes.contains(mime) ||
-           mime.startsWith('text/') ||
            mime.contains('html');
   }
 

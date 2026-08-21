@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 import '../../models/article_status.dart';
 import '../../models/content_block.dart';
@@ -86,18 +87,20 @@ class DownloadQueueManager {
   }
 
   /// Try to start downloads based on available slots
+  /// BUG 3: Semaphore acquire moved into _processArticle to avoid race condition
   void _tryStartDownloads() {
-    // Check HTTP slots
     while (_httpSemaphore.available > 0 && _queue.isNotEmpty) {
       final articleId = _queue.removeAt(0);
       _processing.add(articleId);
-      _httpSemaphore.acquire();
+      // Don't acquire here — acquire inside _processArticle
       _processArticle(articleId);
     }
   }
 
   /// Process a single article
   Future<void> _processArticle(String articleId) async {
+    // BUG 3: Acquire semaphore atomically at the start
+    await _httpSemaphore.acquire();
     try {
       // Get article from repository
       final article = await _repository.getArticle(articleId);
@@ -258,16 +261,12 @@ class DownloadQueueManager {
           continue;
         }
 
-        // Download image
-        final response = await HttpClient().getUrl(Uri.parse(imageUrl))
+        // BUG 4: Use http package instead of raw HttpClient to avoid connection leak
+        final response = await http.get(Uri.parse(imageUrl))
           .timeout(const Duration(seconds: 10));
 
-        final httpClientRequest = response;
-        final httpClientResponse = await httpClientRequest.close();
-
-        if (httpClientResponse.statusCode == 200) {
-          final bytes = await httpClientResponse.toList();
-          final bytesList = bytes.expand((i) => i).toList();
+        if (response.statusCode == 200) {
+          final bytesList = response.bodyBytes;
           
           if (bytesList.length <= _maxImageSizeBytes) {
             // Generate UUID filename
