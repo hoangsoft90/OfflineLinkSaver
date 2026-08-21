@@ -1,10 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
+import '../../core/onboarding/onboarding_state.dart';
+import '../../core/onboarding/onboarding_step.dart';
 import '../../models/article.dart';
 import '../../models/article_status.dart';
 import '../../repositories/article_repository.dart';
 import '../../services/downloader/download_queue_manager.dart';
 import '../../widgets/article_card.dart';
+import '../../widgets/onboarding/feature_badge.dart';
+import '../../widgets/onboarding/onboarding_coordinator.dart';
 import '../reader/reader_screen.dart';
 import '../settings/settings_screen.dart';
 
@@ -29,6 +34,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   List<Article> _articles = [];
   bool _isLoading = true;
   StreamSubscription<DownloadProgress>? _downloadSub;
+  final OnboardingState _onboardingState = OnboardingState();
+
+  // GlobalKeys for onboarding target widgets
+  final GlobalKey _addUrlKey = GlobalKey();
+  final GlobalKey _downloadAllKey = GlobalKey();
+  final GlobalKey _searchKey = GlobalKey();
 
   @override
   void initState() {
@@ -36,11 +47,16 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_loadArticles);
     _loadArticles();
+    _initOnboarding();
 
     // Listen to download progress and refresh article list
     _downloadSub = widget.downloadQueue.progressStream.listen((_) {
       if (mounted) _loadArticles();
     });
+  }
+
+  Future<void> _initOnboarding() async {
+    await _onboardingState.init();
   }
 
   @override
@@ -93,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading articles: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context).errorLoadingArticles(e.toString()))),
         );
       }
     }
@@ -105,11 +121,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Add URL'),
+        title: Text(AppLocalizations.of(context).addUrlTitle),
         content: TextField(
           controller: urlController,
           decoration: const InputDecoration(
-            hintText: 'Paste URL here...',
+            hintText: AppLocalizations.of(context).addUrlHint,
             border: OutlineInputBorder(),
           ),
           autofocus: true,
@@ -117,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context).cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -127,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 if (mounted) Navigator.pop(context);
               }
             },
-            child: const Text('Save'),
+            child: Text(AppLocalizations.of(context).save),
           ),
         ],
       ),
@@ -148,21 +164,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('✓ Saved')),
+            SnackBar(content: Text(AppLocalizations.of(context).savedSuccess)),
           );
           _loadArticles();
         }
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('URL already saved')),
+            SnackBar(content: Text(AppLocalizations.of(context).urlAlreadySaved)),
           );
         }
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving URL: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context).errorSavingUrl(e.toString()))),
         );
       }
     }
@@ -194,17 +210,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Article'),
-        content: Text('Delete "${article.title}"? This cannot be undone.'),
+        title: Text(AppLocalizations.of(context).deleteArticleTitle),
+        content: Text(AppLocalizations.of(context).deleteArticleConfirm(article.title)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context).cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(AppLocalizations.of(context).delete),
           ),
         ],
       ),
@@ -232,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     if (downloadable.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No unread articles to download')),
+          SnackBar(content: Text(AppLocalizations.of(context).noUnreadToDownload)),
         );
       }
       return;
@@ -243,22 +259,57 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Queued ${articleIds.length} articles for download')),
+        SnackBar(content: Text(AppLocalizations.of(context).queuedCount(articleIds.length))),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    // Define onboarding steps for this screen
+    final onboardingSteps = [
+      OnboardingStep(
+        id: 'search',
+        targetKey: _searchKey,
+        title: AppLocalizations.of(context).onboardingSearchTitle,
+        message: AppLocalizations.of(context).onboardingSearchMessage,
+        position: TooltipPosition.bottom,
+        stepNumber: 1,
+        totalSteps: 3,
+      ),
+      OnboardingStep(
+        id: 'download_all',
+        targetKey: _downloadAllKey,
+        title: AppLocalizations.of(context).onboardingDownloadAllTitle,
+        message: AppLocalizations.of(context).onboardingDownloadAllMessage,
+        position: TooltipPosition.left,
+        stepNumber: 2,
+        totalSteps: 3,
+      ),
+      OnboardingStep(
+        id: 'add_url',
+        targetKey: _addUrlKey,
+        title: AppLocalizations.of(context).onboardingAddUrlTitle,
+        message: AppLocalizations.of(context).onboardingAddUrlMessage,
+        position: TooltipPosition.left,
+        stepNumber: 3,
+        totalSteps: 3,
+      ),
+    ];
+
+    return OnboardingCoordinator(
+      flowId: 'home_v1',
+      state: _onboardingState,
+      steps: onboardingSteps,
+      child: Scaffold(
       appBar: AppBar(
-        title: const Text('Offline Link Saver'),
+        title: Text(AppLocalizations.of(context).appTitle),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
-            Tab(text: 'All'),
-            Tab(text: 'Unread'),
-            Tab(text: 'Downloaded'),
+          tabs: [
+            Tab(text: AppLocalizations.of(context).homeTabAll),
+            Tab(text: AppLocalizations.of(context).homeTabUnread),
+            Tab(text: AppLocalizations.of(context).homeTabDownloaded),
           ],
         ),
         actions: [
@@ -283,9 +334,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
+              key: _searchKey,
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search articles...',
+                hintText: AppLocalizations.of(context).searchHint,
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
@@ -350,21 +402,33 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         mainAxisSize: MainAxisSize.min,
         children: [
           // Download All Unread FAB
-          FloatingActionButton.small(
-            onPressed: _downloadAllUnread,
-            heroTag: 'download_all',
-            child: const Icon(Icons.download),
+          FeatureBadge(
+            key: _downloadAllKey,
+            visible: true,
+            label: AppLocalizations.of(context).badgeNew,
+            variant: BadgeVariant.label,
+            child: FloatingActionButton.small(
+              onPressed: _downloadAllUnread,
+              heroTag: 'download_all',
+              child: const Icon(Icons.download),
+            ),
           ),
           const SizedBox(height: 8),
           // Add URL FAB
-          FloatingActionButton(
-            onPressed: _showAddUrlDialog,
-            heroTag: 'add_url',
-            child: const Icon(Icons.add),
+          FeatureBadge(
+            key: _addUrlKey,
+            visible: true,
+            variant: BadgeVariant.dot,
+            child: FloatingActionButton(
+              onPressed: _showAddUrlDialog,
+              heroTag: 'add_url',
+              child: const Icon(Icons.add),
+            ),
           ),
         ],
       ),
-    );
+    ),
+    ); // end OnboardingCoordinator
   }
 
   Widget _buildEmptyState() {
@@ -381,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
             const SizedBox(height: 16),
             Text(
-              'No articles yet',
+              AppLocalizations.of(context).emptyStateTitle,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -390,7 +454,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
             const SizedBox(height: 8),
             Text(
-              'Share a link from Chrome, Facebook, or Telegram\nto save it for offline reading.',
+              AppLocalizations.of(context).emptyStateBody,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
@@ -401,7 +465,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ElevatedButton.icon(
               onPressed: _showAddUrlDialog,
               icon: const Icon(Icons.add),
-              label: const Text('Paste URL'),
+              label: Text(AppLocalizations.of(context).pasteUrl),
             ),
           ],
         ),

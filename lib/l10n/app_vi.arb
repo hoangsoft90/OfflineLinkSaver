@@ -1,0 +1,76 @@
+{
+  "@@locale": "vi",
+
+  "appTitle": "Offline Link Saver",
+
+  "homeTabAll": "Tất cả",
+  "homeTabUnread": "Chưa đọc",
+  "homeTabDownloaded": "Đã tải",
+
+  "searchHint": "Tìm kiếm bài viết...",
+  "emptyStateTitle": "Chưa có bài viết nào",
+  "emptyStateBody": "Chia sẻ liên kết từ Chrome, Facebook hoặc Telegram\nđể lưu đọc offline.",
+  "pasteUrl": "Dán URL",
+
+  "addUrlTitle": "Thêm URL",
+  "addUrlHint": "Dán URL vào đây...",
+  "save": "Lưu",
+  "cancel": "Hủy",
+  "delete": "Xóa",
+  "urlAlreadySaved": "URL đã được lưu",
+  "savedSuccess": "✓ Đã lưu",
+  "errorSavingUrl": "Lỗi lưu URL: {error}",
+  "errorLoadingArticles": "Lỗi tải bài viết: {error}",
+
+  "deleteArticleTitle": "Xóa bài viết",
+  "deleteArticleConfirm": "Xóa \"{title}\"? Hành động này không thể hoàn tác.",
+
+  "noUnreadToDownload": "Không có bài viết chưa đọc để tải",
+  "queuedCount": "Đã thêm {count} bài viết vào hàng tải",
+
+  "readerContentNotAvailable": "Nội dung không khả dụng",
+  "readerContentFileMissing": "File nội dung bị thiếu",
+  "readerFailedToLoad": "Không thể tải nội dung: {error}",
+  "readerOpenInBrowser": "Mở trong trình duyệt",
+  "readerNoContent": "Không có nội dung",
+  "readerFooter": "Đã lưu với Offline Link Saver",
+
+  "settingsTitle": "Cài đặt",
+  "settingsStorage": "Bộ nhớ",
+  "settingsTotalArticles": "Tổng số bài viết",
+  "settingsStorageUsed": "Dung lượng đã dùng",
+  "settingsAbout": "Thông tin",
+  "settingsVersion": "Phiên bản {version}",
+  "settingsPrivacy": "Chính sách bảo mật",
+  "settingsPrivacyText": "Nội dung đã lưu được lưu trữ cục bộ trên thiết bị. Ứng dụng không tải thư viện lên đám mây. Không yêu cầu tài khoản.",
+  "settingsSupport": "Hỗ trợ",
+  "settingsHelp": "Trợ giúp & FAQ",
+  "settingsReportBug": "Báo lỗi",
+  "settingsLanguage": "Ngôn ngữ",
+
+  "articleAuthor": "bởi {author}",
+  "articlePercentRead": "đã đọc {percent}%",
+
+  "disabledFeatureLocked": "Tính năng bị khóa",
+  "disabledGotIt": "Đã hiểu",
+
+  "onboardingSearchTitle": "Tìm trong thư viện",
+  "onboardingSearchMessage": "Tìm nhanh bất kỳ bài viết nào theo tiêu đề hoặc tên miền.",
+  "onboardingDownloadAllTitle": "Tải tất cả chưa đọc",
+  "onboardingDownloadAllMessage": "Nhấn nút này để thêm tất cả bài viết chưa đọc vào hàng tải offline.",
+  "onboardingAddUrlTitle": "Thêm liên kết",
+  "onboardingAddUrlMessage": "Nhấn đây để dán bất kỳ URL nào. Ứng dụng sẽ lưu để đọc offline.",
+  "onboardingNext": "Tiếp theo",
+  "onboardingSkip": "Bỏ qua",
+  "onboardingDone": "Xong",
+
+  "badgeNew": "Mới",
+
+  "statusQueued": "Đang chờ",
+  "statusDownloading": "Đang tải…",
+  "statusProcessing": "Đang xử lý…",
+  "statusReady": "Sẵn sàng offline",
+  "statusFailed": "Thất bại",
+  "statusOnlineOnly": "Chỉ online",
+  "statusRetry": "Thử lại"
+}

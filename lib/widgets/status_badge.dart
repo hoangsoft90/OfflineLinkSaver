@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../models/article_status.dart';
 
 /// Badge widget to display article download status
@@ -14,6 +15,8 @@ class StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -30,7 +33,7 @@ class StatusBadge extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Text(
-            _getText(),
+            _getText(l10n),
             style: TextStyle(
               color: _getIconColor(),
               fontSize: 12,
@@ -47,9 +50,9 @@ class StatusBadge extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'Retry',
-                  style: TextStyle(
+                child: Text(
+                  l10n.statusRetry,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -110,20 +113,20 @@ class StatusBadge extends StatelessWidget {
     }
   }
 
-  String _getText() {
+  String _getText(AppLocalizations l10n) {
     switch (status) {
       case ArticleStatus.ready:
-        return 'Offline ready';
+        return l10n.statusReady;
       case ArticleStatus.downloading:
-        return 'Downloading…';
+        return l10n.statusDownloading;
       case ArticleStatus.processing:
-        return 'Processing…';
+        return l10n.statusProcessing;
       case ArticleStatus.queued:
-        return 'Queued';
+        return l10n.statusQueued;
       case ArticleStatus.failed:
-        return 'Failed';
+        return l10n.statusFailed;
       case ArticleStatus.online_only:
-        return 'Online only';
+        return l10n.statusOnlineOnly;
     }
   }
 }

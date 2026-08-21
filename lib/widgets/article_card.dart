@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../models/article.dart';
 import '../models/article_status.dart';
 import 'status_badge.dart';
@@ -78,7 +79,7 @@ class ArticleCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(
-                    'by ${article.author}',
+                    AppLocalizations.of(context).articleAuthor(article.author!),
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey.shade500,
@@ -140,7 +141,7 @@ class ArticleCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${(article.readingProgress * 100).toInt()}% read',
+                        AppLocalizations.of(context).articlePercentRead((article.readingProgress * 100).toInt()),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey.shade600,

@@ -1,0 +1,101 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Offline Link Saver",
+  "@appTitle": { "description": "App title shown in AppBar" },
+
+  "homeTabAll": "All",
+  "homeTabUnread": "Unread",
+  "homeTabDownloaded": "Downloaded",
+
+  "searchHint": "Search articles...",
+  "emptyStateTitle": "No articles yet",
+  "emptyStateBody": "Share a link from Chrome, Facebook, or Telegram\nto save it for offline reading.",
+  "pasteUrl": "Paste URL",
+
+  "addUrlTitle": "Add URL",
+  "addUrlHint": "Paste URL here...",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "urlAlreadySaved": "URL already saved",
+  "savedSuccess": "✓ Saved",
+  "errorSavingUrl": "Error saving URL: {error}",
+  "@errorSavingUrl": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "errorLoadingArticles": "Error loading articles: {error}",
+  "@errorLoadingArticles": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "deleteArticleTitle": "Delete Article",
+  "deleteArticleConfirm": "Delete \"{title}\"? This cannot be undone.",
+  "@deleteArticleConfirm": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+
+  "noUnreadToDownload": "No unread articles to download",
+  "queuedCount": "Queued {count} articles for download",
+  "@queuedCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "readerContentNotAvailable": "Content not available",
+  "readerContentFileMissing": "Content file missing",
+  "readerFailedToLoad": "Failed to load content: {error}",
+  "@readerFailedToLoad": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "readerOpenInBrowser": "Open in Browser",
+  "readerNoContent": "No content available",
+  "readerFooter": "Saved with Offline Link Saver",
+
+  "settingsTitle": "Settings",
+  "settingsStorage": "Storage",
+  "settingsTotalArticles": "Total Articles",
+  "settingsStorageUsed": "Storage Used",
+  "settingsAbout": "About",
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "settingsPrivacy": "Privacy Policy",
+  "settingsPrivacyText": "Saved content is stored locally on your device. The app does not upload your library to a cloud account. No account required.",
+  "settingsSupport": "Support",
+  "settingsHelp": "Help & FAQ",
+  "settingsReportBug": "Report a Bug",
+  "settingsLanguage": "Language",
+
+  "articleAuthor": "by {author}",
+  "@articleAuthor": {
+    "placeholders": { "author": { "type": "String" } }
+  },
+  "articlePercentRead": "{percent}% read",
+  "@articlePercentRead": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+
+  "disabledFeatureLocked": "Feature Locked",
+  "disabledGotIt": "Got it",
+
+  "onboardingSearchTitle": "Search Your Library",
+  "onboardingSearchMessage": "Quickly find any article by title or domain using the search bar.",
+  "onboardingDownloadAllTitle": "Download All Unread",
+  "onboardingDownloadAllMessage": "Tap this button to queue all unread articles for offline download at once.",
+  "onboardingAddUrlTitle": "Add a Link",
+  "onboardingAddUrlMessage": "Tap here to paste any URL. The app will save it for offline reading.",
+  "onboardingNext": "Next",
+  "onboardingSkip": "Skip",
+  "onboardingDone": "Done",
+
+  "badgeNew": "New",
+
+  "statusQueued": "Queued",
+  "statusDownloading": "Downloading…",
+  "statusProcessing": "Processing…",
+  "statusReady": "Offline ready",
+  "statusFailed": "Failed",
+  "statusOnlineOnly": "Online only",
+  "statusRetry": "Retry"
+}

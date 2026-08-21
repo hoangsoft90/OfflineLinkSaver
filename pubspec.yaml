@@ -9,7 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
   # Database
   sqflite: ^2.3.0
   path_provider: ^2.1.0

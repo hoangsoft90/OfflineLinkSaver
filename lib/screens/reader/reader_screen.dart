@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/article.dart';
@@ -65,7 +66,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
     try {
       if (_article.contentPath == null) {
         setState(() {
-          _error = 'Content not available';
+          _error = AppLocalizations.of(context).readerContentNotAvailable;
           _isLoading = false;
         });
         return;
@@ -74,7 +75,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
       final file = File(_article.contentPath!);
       if (!await file.exists()) {
         setState(() {
-          _error = 'Content file missing';
+          _error = AppLocalizations.of(context).readerContentFileMissing;
           _isLoading = false;
         });
         return;
@@ -109,7 +110,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
       }
     } catch (e) {
       setState(() {
-        _error = 'Failed to load content: $e';
+        _error = AppLocalizations.of(context).readerFailedToLoad(e.toString());
         _isLoading = false;
       });
     }
@@ -131,17 +132,17 @@ class _ReaderScreenState extends State<ReaderScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Article'),
-        content: Text('Delete "${_article.title}"? This cannot be undone.'),
+        title: Text(AppLocalizations.of(context).deleteArticleTitle),
+        content: Text(AppLocalizations.of(context).deleteArticleConfirm(_article.title)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context).cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(AppLocalizations.of(context).delete),
           ),
         ],
       ),
@@ -249,7 +250,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Failed to load content',
+              AppLocalizations.of(context).readerFailedToLoad(''),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -269,7 +270,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
             ElevatedButton.icon(
               onPressed: _openInBrowser,
               icon: const Icon(Icons.open_in_browser),
-              label: const Text('Open in Browser'),
+              label: Text(AppLocalizations.of(context).readerOpenInBrowser),
             ),
           ],
         ),
@@ -280,7 +281,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
   Widget _buildContent() {
     if (_content == null || _content!.blocks.isEmpty) {
       return const Center(
-        child: Text('No content available'),
+        child: Text(AppLocalizations.of(context).readerNoContent),
       );
     }
 
@@ -375,7 +376,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
         Divider(color: Colors.grey.shade300),
         const SizedBox(height: 16),
         Text(
-          'Saved with Offline Link Saver',
+          AppLocalizations.of(context).readerFooter,
           style: TextStyle(
             fontSize: _fontSize - 4,
             color: Colors.grey.shade500,
