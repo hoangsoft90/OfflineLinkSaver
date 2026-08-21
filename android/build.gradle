@@ -23,15 +23,32 @@ subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 
-// Force consistent Kotlin JVM target for all subprojects.
-// Only touches KotlinCompile tasks — does NOT set compileSdk or Android compileOptions
-// (which would break subprojects like package_info_plus that lack compileSdk).
+// Force consistent JVM targets for all subprojects with kotlin-android.
+// Sets BOTH KotlinCompile.jvmTarget AND Android compileOptions to Java 17.
+// Only touches projects that use kotlin-android (safe — won't break non-Kotlin libs).
 gradle.projectsEvaluated {
     subprojects { proj ->
         proj.plugins.withId('kotlin-android') {
             proj.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
                 kotlinOptions {
                     jvmTarget = '17'
+                }
+            }
+            // Also set Java compile target to match
+            proj.plugins.withId('com.android.library') {
+                proj.android {
+                    compileOptions {
+                        sourceCompatibility JavaVersion.VERSION_17
+                        targetCompatibility JavaVersion.VERSION_17
+                    }
+                }
+            }
+            proj.plugins.withId('com.android.application') {
+                proj.android {
+                    compileOptions {
+                        sourceCompatibility JavaVersion.VERSION_17
+                        targetCompatibility JavaVersion.VERSION_17
+                    }
                 }
             }
         }
