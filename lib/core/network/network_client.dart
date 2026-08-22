@@ -3,24 +3,20 @@ import 'package:http/http.dart' as http;
 
 /// Network client with timeout and redirect handling
 class NetworkClient {
-  static const int _timeoutSeconds = 15;
-  static const int _maxRedirectHops = 5;
-  static const int _maxResponseSize = 5 * 1024 * 1024; // 5MB — modern pages can be large
+  static const int _timeoutSeconds = 30;
+  static const int _maxRedirectHops = 8;
+  static const int _maxResponseSize = 10 * 1024 * 1024; // 10MB — modern pages can be very large (CNN=5.8MB, etc.)
 
   /// Content types that are acceptable for article extraction
-  static final _allowedContentTypes = {
-    'text/html', 'text/plain', 'application/xhtml',
-    'application/xhtml+xml', 'application/xml', 'text/xml',
-  };
-
   /// Check if a Content-Type header indicates downloadable HTML content
   static bool _isAcceptableContentType(String? contentType) {
     if (contentType == null) return true; // Assume OK if no header (some servers omit it)
     final mime = contentType.split(';').first.trim().toLowerCase();
-    // Accept if it's HTML-like or if it's generic/octet (some servers misconfigure)
-    // BUG 7: Only accept HTML-like types, not all text/* (rejects text/css, text/csv etc.)
-    return _allowedContentTypes.contains(mime) ||
-           mime.contains('html');
+    // Accept HTML-like types and any text/* (some servers return text/plain for HTML)
+    return mime.contains('html') ||
+           mime.startsWith('text/') ||
+           mime.contains('xml') ||
+           mime == 'application/octet-stream'; // Some servers misconfigure
   }
 
   /// Fetch URL with redirect resolution (max 5 hops)

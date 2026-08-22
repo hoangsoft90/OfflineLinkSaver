@@ -8,7 +8,8 @@ import '../../core/network/network_client.dart';
 /// Fetches HTML and parses using heuristic rules
 class HttpExtractor {
   /// Minimum word count to consider extraction successful
-  static const int _minWordCount = 200;
+  /// Lowered to 100 to support shorter articles and non-English content
+  static const int _minWordCount = 100;
 
   /// File extensions that indicate non-HTML content (not articles)
   static final _binaryExtensions = {

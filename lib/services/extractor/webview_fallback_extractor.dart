@@ -9,7 +9,7 @@ import 'http_extractor.dart';
 /// Concurrency limited to 1 WebView instance at a time
 class WebViewFallbackExtractor {
   static const int _renderTimeoutSeconds = 10;
-  static const int _minWordCount = 200;
+  static const int _minWordCount = 100; // Lowered to support shorter articles
 
   /// Extract article using WebView
   /// Returns null if extraction fails
