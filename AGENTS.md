@@ -65,6 +65,22 @@ Run through 9 Release Gates (`plan1_final_v2.md` §13). Especially:
 - **Gate 5:** `adb shell am kill`, not hot-restart
 - **Gate 1:** Test with site that definitely fails extraction
 
+## External Services
+
+### Simplenote MCP (Notes & Tasks)
+
+```bash
+# Config: ~/mcp.json
+# Auth: ~/.config/simplenote-mcp/auth.json
+# Package: @automattic/simplenote-mcp
+# User: kd.hoangweb@gmail.com
+
+# List notes
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"buffy","version":"1.0"}}}'; sleep 1; echo '{"jsonrpc":"2.0","method":"notifications/initialized"}'; sleep 0.5; echo '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"list_notes","arguments":{"limit":10}}}'; sleep 4) | timeout 12 npx -y @automattic/simplenote-mcp 2>/dev/null
+```
+
+Full docs: `.agents/skills/simplenote-mcp.md`
+
 ## Lint Rules
 
 Project uses `flutter_lints` with strict rules. Key ones:

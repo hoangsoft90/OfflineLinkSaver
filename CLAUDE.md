@@ -13,6 +13,14 @@ I am Buffy (Codebuff). This project uses Freebuff. Keep role consistent.
 - **Knowledge Base:** `.project/` folder (architecture, patterns, state, modules)
 - **SDK:** Dart >=3.0.0 <4.0.0, Flutter 3.x
 
+## Simplenote MCP
+
+Config: `~/mcp.json` | Auth: `~/.config/simplenote-mcp/auth.json`
+Package: `@automattic/simplenote-mcp` | User: `kd.hoangweb@gmail.com`
+
+Call via stdio JSON-RPC. See `.agents/skills/simplenote-mcp.md` for full usage.
+Quick: `list_notes`, `create_note`, `search_notes`, `update_note`, `trash_note`.
+
 ## File Reading Priority
 
 When starting work, read in this order:
