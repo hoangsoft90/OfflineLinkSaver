@@ -55,7 +55,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
       onAdLoaded: (_) {
         if (mounted) setState(() => _isBannerAdLoaded = true);
       },
-    )..load();
+    );
+    _bannerAd?.load();
   }
 
   @override

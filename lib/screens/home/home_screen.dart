@@ -84,7 +84,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       onAdLoaded: (_) {
         if (mounted) setState(() => _isBannerAdLoaded = true);
       },
-    )..load();
+    );
+    _bannerAd?.load();
   }
 
   @override

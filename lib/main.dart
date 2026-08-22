@@ -42,8 +42,10 @@ void main() async {
 
   // ── App init ──
   AdsConfig.logConfig();
-  await MobileAds.instance.initialize();
-  AdService.instance.loadInterstitialAd();
+  if (AdsConfig.enableAds) {
+    await MobileAds.instance.initialize();
+    AdService.instance.loadInterstitialAd();
+  }
 
   final savedLocale = await _loadSavedLocale();
 

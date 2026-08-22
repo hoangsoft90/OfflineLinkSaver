@@ -11,7 +11,11 @@ import 'package:flutter/foundation.dart';
 class AdsConfig {
   AdsConfig._();
 
-  // ── Master Switch ───────────────────────────────────────────────────
+  // ── Master Switches ─────────────────────────────────────────────────
+
+  /// Master switch to completely enable/disable ads.
+  /// Set to `true` to show ads, `false` to hide all ads everywhere.
+  static const bool enableAds = false;
 
   /// Set to `false` before publishing to production.
   /// In test mode all ad unit IDs point to Google's official test units.
@@ -116,7 +120,7 @@ class AdsConfig {
   // ── Debug Logging ───────────────────────────────────────────────────
 
   static void logConfig() {
-    debugPrint('[AdsConfig] testAds=$testAds');
+    debugPrint('[AdsConfig] enableAds=$enableAds, testAds=$testAds');
     debugPrint('[AdsConfig] banner=$bannerAdUnitId');
     debugPrint('[AdsConfig] interstitial=$interstitialAdUnitId');
     debugPrint('[AdsConfig] rewarded=$rewardedAdUnitId');

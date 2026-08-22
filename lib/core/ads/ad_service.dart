@@ -28,6 +28,7 @@ class AdService {
 
   /// Pre-load an interstitial ad. Call once at app start and after each show.
   void loadInterstitialAd() {
+    if (!AdsConfig.enableAds) return;
     if (_interstitialAd != null || _isLoadingInterstitial) return;
     _isLoadingInterstitial = true;
 
@@ -54,6 +55,11 @@ class AdService {
   ///
   /// [onDismissed] is called whether the ad was shown or not (fallback path).
   bool showInterstitialAd({VoidCallback? onDismissed}) {
+    if (!AdsConfig.enableAds) {
+      onDismissed?.call();
+      return false;
+    }
+
     // Cooldown check
     if (!_interstitialCooledDown) {
       debugPrint('[AdService] Interstitial on cooldown, skipping');
@@ -97,12 +103,15 @@ class AdService {
   /// Create a banner ad widget. Caller is responsible for disposing it.
   ///
   /// [tag] is used for cooldown tracking — pass a unique string per screen.
-  BannerAd createBannerAd({
+  /// Create a banner ad widget. Returns null if ads are disabled.
+  BannerAd? createBannerAd({
     String tag = 'default',
     AdSize size = AdSize.banner,
     void Function(Ad ad)? onAdLoaded,
     void Function(Ad ad, LoadAdError error)? onAdFailedToLoad,
   }) {
+    if (!AdsConfig.enableAds) return null;
+
     return BannerAd(
       adUnitId: AdsConfig.bannerAdUnitId,
       size: size,
