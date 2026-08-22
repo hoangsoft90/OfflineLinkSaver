@@ -10,6 +10,7 @@ import 'core/database/database_helper.dart';
 import 'repositories/article_repository.dart';
 import 'services/downloader/download_queue_manager.dart';
 import 'services/share_handler/share_handler.dart';
+import 'core/onboarding/onboarding_state.dart';
 import 'screens/home/home_screen.dart';
 
 /// SharedPreferences key for persisted locale choice.
@@ -59,6 +60,9 @@ void main() async {
     downloadQueue: downloadQueue,
   );
   shareHandler.initialize();
+
+  // Init onboarding state before HomeScreen builds
+  await OnboardingState().init();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

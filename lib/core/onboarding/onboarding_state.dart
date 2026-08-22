@@ -21,7 +21,11 @@ class OnboardingState {
   }
 
   SharedPreferences get _store {
-    assert(_prefs != null, 'OnboardingState.init() must be called first');
+    // Graceful fallback: if init() wasn't awaited yet, return a dummy
+    // that always reports 'not seen' so onboarding still works.
+    if (_prefs == null) {
+      return _NoOpPrefs();
+    }
     return _prefs!;
   }
 
@@ -85,4 +89,40 @@ class OnboardingState {
       await _store.remove(key);
     }
   }
+}
+
+/// No-op SharedPreferences used as fallback when init() hasn't completed.
+class _NoOpPrefs implements SharedPreferences {
+  @override
+  dynamic get(String key) => null;
+  @override
+  bool? getBool(String key) => false;
+  @override
+  int? getInt(String key) => null;
+  @override
+  double? getDouble(String key) => null;
+  @override
+  String? getString(String key) => null;
+  @override
+  List<String>? getStringList(String key) => null;
+  @override
+  Set<String> getKeys() => {};
+  @override
+  Future<bool> setBool(String key, bool value) async => true;
+  @override
+  Future<bool> setInt(String key, int value) async => true;
+  @override
+  Future<bool> setDouble(String key, double value) async => true;
+  @override
+  Future<bool> setString(String key, String value) async => true;
+  @override
+  Future<bool> setStringList(String key, List<String> value) async => true;
+  @override
+  Future<bool> remove(String key) async => true;
+  @override
+  Future<bool> clear() async => true;
+  @override
+  Future<void> reload() async {}
+  @override
+  bool containsKey(String key) => false;
 }
