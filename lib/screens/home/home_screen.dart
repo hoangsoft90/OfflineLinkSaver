@@ -68,8 +68,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
     // BUG 10: Listen to download progress and refresh article list
     _downloadSub = widget.downloadQueue.progressStream.listen((_) {
-      // Extra safety: check mounted after async gap in _loadArticles too
-      if (mounted && !_isDisposed) _loadArticles();
+      if (mounted && !_isDisposed) _loadArticles(silent: true);
     });
   }
 
@@ -98,8 +97,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     super.dispose();
   }
 
-  Future<void> _loadArticles() async {
-    setState(() => _isLoading = true);
+  Future<void> _loadArticles({bool silent = false}) async {
+    if (!silent) setState(() => _isLoading = true);
 
     try {
       List<Article> articles;

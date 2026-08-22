@@ -73,6 +73,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Use release signing when available to avoid INSTALL_FAILED_UPDATE_INCOMPATIBLE
+            signingConfig signingConfigs.release.storeFile != null ? signingConfigs.release : signingConfigs.debug
+        }
         release {
             signingConfig signingConfigs.release.storeFile != null ? signingConfigs.release : signingConfigs.debug
             minifyEnabled true

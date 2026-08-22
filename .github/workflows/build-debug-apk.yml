@@ -41,6 +41,17 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      # Use the SAME release keystore for debug builds
+      # so there's no INSTALL_FAILED_UPDATE_INCOMPATIBLE
+      - name: Create key.properties
+        run: |
+          cat > android/key.properties << KEYEOF
+          storePassword=${{ secrets.KEYSTORE_STORE_PASSWORD }}
+          keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}
+          storeFile=release-keystore.jks
+          KEYEOF
+
       - name: Analyze code
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
