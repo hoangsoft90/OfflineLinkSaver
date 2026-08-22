@@ -27,6 +27,22 @@
 
   "noUnreadToDownload": "Không có bài viết chưa đọc để tải",
   "queuedCount": "Đã thêm {count} bài viết vào hàng tải",
+  "downloadQueued": "Đã thêm vào hàng tải",
+  "download": "Tải",
+
+  "category": "Danh mục",
+  "none": "Không có",
+  "addCategory": "Thêm danh mục",
+  "editCategory": "Sửa danh mục",
+  "manageCategories": "Quản lý danh mục",
+  "deleteCategory": "Xóa danh mục",
+  "deleteCategoryConfirm": "Xóa danh mục \"{name}\"? Các bài viết sẽ được chuyển về không có danh mục.",
+  "noCategories": "Chưa có danh mục nào",
+  "categoryNameHint": "Tên danh mục...",
+  "manage": "Quản lý",
+  "noCategory": "Không có danh mục",
+  "filterFavorites": "Yêu thích",
+  "clearFilters": "Xóa bộ lọc",
 
   "readerContentNotAvailable": "Nội dung không khả dụng",
   "readerContentFileMissing": "File nội dung bị thiếu",

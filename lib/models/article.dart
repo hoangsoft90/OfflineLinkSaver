@@ -10,6 +10,7 @@ class Article {
   String? excerpt;
   String? coverImagePath;
   String? contentPath;
+  String? categoryId;
   ArticleStatus status;
   int extractorVersion;
   bool isRead;
@@ -29,6 +30,7 @@ class Article {
     this.excerpt,
     this.coverImagePath,
     this.contentPath,
+    this.categoryId,
     required this.status,
     this.extractorVersion = 1,
     this.isRead = false,
@@ -50,6 +52,7 @@ class Article {
       'excerpt': excerpt,
       'cover_image_path': coverImagePath,
       'content_path': contentPath,
+      'category_id': categoryId,
       'status': status.value,
       'extractor_version': extractorVersion,
       'is_read': isRead ? 1 : 0,
@@ -72,6 +75,7 @@ class Article {
       excerpt: map['excerpt'] as String?,
       coverImagePath: map['cover_image_path'] as String?,
       contentPath: map['content_path'] as String?,
+      categoryId: map['category_id'] as String?,
       status: ArticleStatusExtension.fromString(map['status'] as String),
       extractorVersion: map['extractor_version'] as int? ?? 1,
       isRead: (map['is_read'] as int?) == 1,
@@ -90,6 +94,7 @@ class Article {
     String? excerpt,
     String? coverImagePath,
     String? contentPath,
+    String? categoryId,
     ArticleStatus? status,
     int? extractorVersion,
     bool? isRead,
@@ -108,6 +113,7 @@ class Article {
       excerpt: excerpt ?? this.excerpt,
       coverImagePath: coverImagePath ?? this.coverImagePath,
       contentPath: contentPath ?? this.contentPath,
+      categoryId: categoryId ?? this.categoryId,
       status: status ?? this.status,
       extractorVersion: extractorVersion ?? this.extractorVersion,
       isRead: isRead ?? this.isRead,

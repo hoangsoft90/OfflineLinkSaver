@@ -8,6 +8,7 @@ import 'core/ads/ads_config.dart';
 import 'core/ads/ad_service.dart';
 import 'core/database/database_helper.dart';
 import 'repositories/article_repository.dart';
+import 'repositories/category_repository.dart';
 import 'services/downloader/download_queue_manager.dart';
 import 'services/share_handler/share_handler.dart';
 import 'core/onboarding/onboarding_state.dart';
@@ -54,6 +55,7 @@ void main() async {
   await DatabaseHelper.startupSanitization(db);
 
   final repository = ArticleRepository();
+  final categoryRepository = CategoryRepository();
   final downloadQueue = DownloadQueueManager(repository: repository);
   final shareHandler = ShareHandler(
     repository: repository,
@@ -71,6 +73,7 @@ void main() async {
 
   runApp(OfflineLinkSaverApp(
     repository: repository,
+    categoryRepository: categoryRepository,
     downloadQueue: downloadQueue,
     shareHandler: shareHandler,
     initialLocale: savedLocale,
@@ -79,6 +82,7 @@ void main() async {
 
 class OfflineLinkSaverApp extends StatefulWidget {
   final ArticleRepository repository;
+  final CategoryRepository categoryRepository;
   final DownloadQueueManager downloadQueue;
   final ShareHandler shareHandler;
   final Locale? initialLocale;
@@ -86,6 +90,7 @@ class OfflineLinkSaverApp extends StatefulWidget {
   const OfflineLinkSaverApp({
     super.key,
     required this.repository,
+    required this.categoryRepository,
     required this.downloadQueue,
     required this.shareHandler,
     this.initialLocale,
@@ -144,6 +149,7 @@ class _OfflineLinkSaverAppState extends State<OfflineLinkSaverApp> {
       themeMode: ThemeMode.system,
       home: HomeScreen(
         repository: widget.repository,
+        categoryRepository: widget.categoryRepository,
         downloadQueue: widget.downloadQueue,
       ),
     );

@@ -40,6 +40,25 @@
   "@queuedCount": {
     "placeholders": { "count": { "type": "int" } }
   },
+  "downloadQueued": "Queued for download",
+  "download": "Download",
+
+  "category": "Category",
+  "none": "None",
+  "addCategory": "Add Category",
+  "editCategory": "Edit Category",
+  "manageCategories": "Manage Categories",
+  "deleteCategory": "Delete Category",
+  "deleteCategoryConfirm": "Delete \"{name}\" category? Articles will be uncategorized.",
+  "@deleteCategoryConfirm": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "noCategories": "No categories yet",
+  "categoryNameHint": "Category name...",
+  "manage": "Manage",
+  "noCategory": "No category",
+  "filterFavorites": "Favorites",
+  "clearFilters": "Clear",
 
   "readerContentNotAvailable": "Content not available",
   "readerContentFileMissing": "Content file missing",

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../models/article.dart';
 import '../models/article_status.dart';
+import '../models/category.dart';
 import 'status_badge.dart';
 
 /// Card widget for displaying article in library
@@ -10,7 +11,10 @@ class ArticleCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
   final VoidCallback? onRetry;
+  final VoidCallback? onDownload;
   final VoidCallback? onToggleFavorite;
+  final ValueChanged<String?>? onCategoryChanged;
+  final List<Category> categories;
 
   const ArticleCard({
     super.key,
@@ -18,11 +22,18 @@ class ArticleCard extends StatelessWidget {
     this.onTap,
     this.onDelete,
     this.onRetry,
+    this.onDownload,
     this.onToggleFavorite,
+    this.onCategoryChanged,
+    this.categories = const [],
   });
 
   @override
   Widget build(BuildContext context) {
+    final categoryName = article.categoryId != null
+        ? categories.where((c) => c.id == article.categoryId).map((c) => c.name).firstOrNull
+        : null;
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
@@ -62,16 +73,34 @@ class ArticleCard extends StatelessWidget {
                 ],
               ),
 
+              // Category badge
+              if (categoryName != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: _getCategoryColor(context),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      categoryName,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
               // Domain and author
               if (article.domain.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
                     article.domain,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                   ),
                 ),
 
@@ -80,10 +109,7 @@ class ArticleCard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 2),
                   child: Text(
                     AppLocalizations.of(context).articleAuthor(article.author!),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade500,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                   ),
                 ),
 
@@ -93,10 +119,7 @@ class ArticleCard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
                     article.excerpt!,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade700,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -115,6 +138,43 @@ class ArticleCard extends StatelessWidget {
 
                   const Spacer(),
 
+                  // Download button (for non-ready articles)
+                  if (onDownload != null)
+                    IconButton(
+                      icon: const Icon(Icons.download, size: 20),
+                      onPressed: onDownload,
+                      color: Colors.blue,
+                      tooltip: AppLocalizations.of(context).download,
+                    ),
+
+                  // Category picker button
+                  if (onCategoryChanged != null && categories.isNotEmpty)
+                    PopupMenuButton<String?>(
+                      icon: Icon(
+                        Icons.label_outline,
+                        size: 20,
+                        color: Colors.grey,
+                      ),
+                      tooltip: AppLocalizations.of(context).category,
+                      onSelected: onCategoryChanged,
+                      itemBuilder: (context) => [
+                        PopupMenuItem<String?>(
+                          value: null,
+                          child: Text(AppLocalizations.of(context).noCategory),
+                        ),
+                        ...categories.map((cat) => PopupMenuItem<String?>(
+                          value: cat.id,
+                          child: Row(
+                            children: [
+                              Icon(Icons.circle, size: 12, color: cat.toColor),
+                              const SizedBox(width: 8),
+                              Text(cat.name),
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+
                   // Delete button
                   if (onDelete != null)
                     IconButton(
@@ -125,7 +185,7 @@ class ArticleCard extends StatelessWidget {
                 ],
               ),
 
-              // Reading progress bar (if started reading)
+              // Reading progress bar
               if (article.readingProgress > 0 && article.status == ArticleStatus.ready)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -141,11 +201,10 @@ class ArticleCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        AppLocalizations.of(context).articlePercentRead((article.readingProgress * 100).toInt()),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+                        AppLocalizations.of(context).articlePercentRead(
+                          (article.readingProgress * 100).toInt(),
                         ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                       ),
                     ],
                   ),
@@ -155,5 +214,11 @@ class ArticleCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _getCategoryColor(BuildContext context) {
+    if (article.categoryId == null) return Theme.of(context).colorScheme.primary;
+    final cat = categories.where((c) => c.id == article.categoryId).firstOrNull;
+    return cat?.toColor ?? Theme.of(context).colorScheme.primary;
   }
 }

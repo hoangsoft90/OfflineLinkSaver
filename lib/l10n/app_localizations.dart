@@ -75,6 +75,27 @@ class AppLocalizations {
 
   String get noUnreadToDownload => _resolve('noUnreadToDownload');
   String queuedCount(int count) => _resolve('queuedCount', count: count.toString());
+  String get downloadQueued => _resolve('downloadQueued');
+  String get download => _resolve('download');
+
+  // ── Category ──
+
+  String get category => _resolve('category');
+  String get none => _resolve('none');
+  String get addCategory => _resolve('addCategory');
+  String get editCategory => _resolve('editCategory');
+  String get manageCategories => _resolve('manageCategories');
+  String get deleteCategory => _resolve('deleteCategory');
+  String deleteCategoryConfirm(String name) => _resolve('deleteCategoryConfirm', name: name);
+  String get noCategories => _resolve('noCategories');
+  String get categoryNameHint => _resolve('categoryNameHint');
+  String get manage => _resolve('manage');
+  String get noCategory => _resolve('noCategory');
+
+  // ── Filter ──
+
+  String get filterFavorites => _resolve('filterFavorites');
+  String get clearFilters => _resolve('clearFilters');
 
   // ── Reader ──
 
@@ -138,7 +159,7 @@ class AppLocalizations {
 
   // ── Internal ──
 
-  String _resolve(String key, {String? error, String? title, String? version, String? author, String? percent, String? count}) {
+  String _resolve(String key, {String? error, String? title, String? version, String? author, String? percent, String? count, String? name}) {
     final map = _localeMap;
     final value = map[key];
     if (value == null) return '[$key]';
@@ -150,6 +171,7 @@ class AppLocalizations {
     if (author != null) result = result.replaceAll('{author}', author);
     if (percent != null) result = result.replaceAll('{percent}', percent);
     if (count != null) result = result.replaceAll('{count}', count);
+    if (name != null) result = result.replaceAll('{name}', name);
     return result;
   }
 
@@ -204,6 +226,21 @@ const Map<String, String> _en = {
   'deleteArticleConfirm': 'Delete "{title}"? This cannot be undone.',
   'noUnreadToDownload': 'No unread articles to download',
   'queuedCount': 'Queued {count} articles for download',
+  'downloadQueued': 'Queued for download',
+  'download': 'Download',
+  'category': 'Category',
+  'none': 'None',
+  'addCategory': 'Add Category',
+  'editCategory': 'Edit Category',
+  'manageCategories': 'Manage Categories',
+  'deleteCategory': 'Delete Category',
+  'deleteCategoryConfirm': 'Delete "{name}" category? Articles will be uncategorized.',
+  'noCategories': 'No categories yet',
+  'categoryNameHint': 'Category name...',
+  'manage': 'Manage',
+  'noCategory': 'No category',
+  'filterFavorites': 'Favorites',
+  'clearFilters': 'Clear',
   'readerContentNotAvailable': 'Content not available',
   'readerContentFileMissing': 'Content file missing',
   'readerFailedToLoad': 'Failed to load content: {error}',
@@ -269,6 +306,21 @@ const Map<String, String> _vi = {
   'deleteArticleConfirm': 'Xóa "{title}"? Hành động này không thể hoàn tác.',
   'noUnreadToDownload': 'Không có bài viết chưa đọc để tải',
   'queuedCount': 'Đã thêm {count} bài viết vào hàng tải',
+  'downloadQueued': 'Đã thêm vào hàng tải',
+  'download': 'Tải',
+  'category': 'Danh mục',
+  'none': 'Không có',
+  'addCategory': 'Thêm danh mục',
+  'editCategory': 'Sửa danh mục',
+  'manageCategories': 'Quản lý danh mục',
+  'deleteCategory': 'Xóa danh mục',
+  'deleteCategoryConfirm': 'Xóa danh mục "{name}"? Các bài viết sẽ được chuyển về không có danh mục.',
+  'noCategories': 'Chưa có danh mục nào',
+  'categoryNameHint': 'Tên danh mục...',
+  'manage': 'Quản lý',
+  'noCategory': 'Không có danh mục',
+  'filterFavorites': 'Yêu thích',
+  'clearFilters': 'Xóa bộ lọc',
   'readerContentNotAvailable': 'Nội dung không khả dụng',
   'readerContentFileMissing': 'File nội dung bị thiếu',
   'readerFailedToLoad': 'Không thể tải nội dung: {error}',
@@ -334,6 +386,21 @@ const Map<String, String> _zh = {
   'deleteArticleConfirm': '删除「{title}」？此操作不可撤销。',
   'noUnreadToDownload': '没有未读文章可下载',
   'queuedCount': '已将 {count} 篇文章加入下载队列',
+  'downloadQueued': '已加入下载队列',
+  'download': '下载',
+  'category': '分类',
+  'none': '无',
+  'addCategory': '添加分类',
+  'editCategory': '编辑分类',
+  'manageCategories': '管理分类',
+  'deleteCategory': '删除分类',
+  'deleteCategoryConfirm': '删除分类「{name}」？文章将变为未分类。',
+  'noCategories': '暂无分类',
+  'categoryNameHint': '分类名称...',
+  'manage': '管理',
+  'noCategory': '无分类',
+  'filterFavorites': '收藏',
+  'clearFilters': '清除',
   'readerContentNotAvailable': '内容不可用',
   'readerContentFileMissing': '内容文件缺失',
   'readerFailedToLoad': '加载内容失败：{error}',
