@@ -124,5 +124,7 @@ class _NoOpPrefs implements SharedPreferences {
   @override
   Future<void> reload() async {}
   @override
+  Future<bool> commit() async => true;
+  @override
   bool containsKey(String key) => false;
 }
