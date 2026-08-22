@@ -777,27 +777,28 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
     final colors = ['#2196F3', '#4CAF50', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4', '#F44336', '#795548'];
 
     final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
+      context: context,        builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(AppLocalizations.of(context).addCategory),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context).categoryNameHint,
-                  border: const OutlineInputBorder(),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context).categoryNameHint,
+                    border: const OutlineInputBorder(),
+                  ),
+                  autofocus: true,
                 ),
-                autofocus: true,
-              ),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: colors.map((c) {
-                  final color = Color(int.parse('FF$c', radix: 16));
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: colors.map((c) {
+                    final hex = c.replaceFirst('#', '');
+                    final color = Color(int.parse('FF$hex', radix: 16));
                   return GestureDetector(
                     onTap: () => setDialogState(() => selectedColor = c),
                     child: Container(
@@ -816,6 +817,9 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
                     ),
                   );
                 }).toList(),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -854,24 +858,25 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
     final colors = ['#2196F3', '#4CAF50', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4', '#F44336', '#795548'];
 
     final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => StatefulBuilder(
+      context: context,        builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(AppLocalizations.of(context).editCategory),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(border: OutlineInputBorder()),
-                autofocus: true,
-              ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(border: OutlineInputBorder()),
+                  autofocus: true,
+                ),
               const SizedBox(height: 16),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: colors.map((c) {
-                  final color = Color(int.parse('FF$c', radix: 16));
+                  final hex = c.replaceFirst('#', '');
+                  final color = Color(int.parse('FF$hex', radix: 16));
                   return GestureDetector(
                     onTap: () => setDialogState(() => selectedColor = c),
                     child: Container(
@@ -889,10 +894,12 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
                           : null,
                     ),
                   );
-                }).toList(),
+                    }).toList(),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
