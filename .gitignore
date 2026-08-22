@@ -61,3 +61,4 @@ app.*.map.json
 !/ios/Pods/**/Pods-Bridging-Header.h
 android/local.properties
 google-services.json
+android/key.properties

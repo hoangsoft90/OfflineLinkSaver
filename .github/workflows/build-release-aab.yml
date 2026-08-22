@@ -1,0 +1,81 @@
+name: Build Release AAB
+
+on:
+  workflow_dispatch:  # Manual trigger only
+  push:
+    branches: [main]
+    paths:
+      - 'lib/**'
+      - 'android/**'
+      - 'pubspec.yaml'
+      - 'pubspec.lock'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Create local.properties
+        run: |
+          FLUTTER_PATH=$(which flutter | xargs dirname | xargs dirname)
+          echo "flutter.sdk=$FLUTTER_PATH" > android/local.properties
+          echo "flutter.versionCode=1" >> android/local.properties
+          echo "flutter.versionName=1.0" >> android/local.properties
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      # ── Release signing ──
+      # Keystore is committed to repo (fixed project keystore).
+      # Passwords come from GitHub Secrets for safety.
+      - name: Create key.properties
+        run: |
+          cat > android/key.properties << KEYEOF
+          storePassword=${{ secrets.KEYSTORE_STORE_PASSWORD }}
+          keyPassword=${{ secrets.KEYSTORE_KEY_PASSWORD }}
+          keyAlias=${{ secrets.KEYSTORE_KEY_ALIAS }}
+          storeFile=release-keystore.jks
+          KEYEOF
+          echo "key.properties created"
+
+      - name: Build release AAB
+        run: flutter build appbundle --release
+
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## ✅ Release AAB Built" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**File:** \`app-release.aab\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Signing:** release-keystore.jks (alias: thinksave)" >> $GITHUB_STEP_SUMMARY
+          echo "**Package:** com.mindsoft.thinksave" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download the AAB from the Artifacts section below." >> $GITHUB_STEP_SUMMARY
+          echo "Upload it to Google Play Console → Production track." >> $GITHUB_STEP_SUMMARY
