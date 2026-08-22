@@ -773,11 +773,11 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
   Future<void> _addCategory() async {
     final nameController = TextEditingController();
     String selectedColor = '#2196F3';
-
     final colors = ['#2196F3', '#4CAF50', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4', '#F44336', '#795548'];
 
     final result = await showDialog<bool>(
-      context: context,        builder: (context) => StatefulBuilder(
+      context: context,
+      builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(AppLocalizations.of(context).addCategory),
           content: SingleChildScrollView(
@@ -799,42 +799,43 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
                   children: colors.map((c) {
                     final hex = c.replaceFirst('#', '');
                     final color = Color(int.parse('FF$hex', radix: 16));
-                  return GestureDetector(
-                    onTap: () => setDialogState(() => selectedColor = c),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: selectedColor == c
-                            ? Border.all(color: Colors.black, width: 3)
+                    return GestureDetector(
+                      onTap: () => setDialogState(() => selectedColor = c),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: selectedColor == c
+                              ? Border.all(color: Colors.black, width: 3)
+                              : null,
+                        ),
+                        child: selectedColor == c
+                            ? const Icon(Icons.check, color: Colors.white, size: 20)
                             : null,
                       ),
-                      child: selectedColor == c
-                          ? const Icon(Icons.check, color: Colors.white, size: 20)
-                          : null,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(AppLocalizations.of(context).cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                if (nameController.text.trim().isNotEmpty) {
+                  Navigator.pop(context, true);
+                }
+              },
+              child: Text(AppLocalizations.of(context).save),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalizations.of(context).cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              if (nameController.text.trim().isNotEmpty) {
-                Navigator.pop(context, true);
-              }
-            },
-            child: Text(AppLocalizations.of(context).save),
-          ),
-        ],
       ),
     );
 
@@ -851,11 +852,11 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
   Future<void> _editCategory(Category category) async {
     final nameController = TextEditingController(text: category.name);
     String selectedColor = category.color;
-
     final colors = ['#2196F3', '#4CAF50', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4', '#F44336', '#795548'];
 
     final result = await showDialog<bool>(
-      context: context,        builder: (context) => StatefulBuilder(
+      context: context,
+      builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           title: Text(AppLocalizations.of(context).editCategory),
           content: SingleChildScrollView(
@@ -867,45 +868,46 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
                   decoration: const InputDecoration(border: OutlineInputBorder()),
                   autofocus: true,
                 ),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: colors.map((c) {
-                  final hex = c.replaceFirst('#', '');
-                  final color = Color(int.parse('FF$hex', radix: 16));
-                  return GestureDetector(
-                    onTap: () => setDialogState(() => selectedColor = c),
-                    child: Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: selectedColor == c
-                            ? Border.all(color: Colors.black, width: 3)
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: colors.map((c) {
+                    final hex = c.replaceFirst('#', '');
+                    final color = Color(int.parse('FF$hex', radix: 16));
+                    return GestureDetector(
+                      onTap: () => setDialogState(() => selectedColor = c),
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: selectedColor == c
+                              ? Border.all(color: Colors.black, width: 3)
+                              : null,
+                        ),
+                        child: selectedColor == c
+                            ? const Icon(Icons.check, color: Colors.white, size: 20)
                             : null,
                       ),
-                      child: selectedColor == c
-                          ? const Icon(Icons.check, color: Colors.white, size: 20)
-                          : null,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(AppLocalizations.of(context).cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(AppLocalizations.of(context).save),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalizations.of(context).cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(AppLocalizations.of(context).save),
-          ),
-        ],
       ),
     );
 
