@@ -817,9 +817,6 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
                     ),
                   );
                 }).toList(),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -894,12 +891,10 @@ class _CategoryManageDialogState extends State<_CategoryManageDialog> {
                           : null,
                     ),
                   );
-                    }).toList(),
-                  ),
-                ],
+                }).toList(),
               ),
-            ),
-          ],
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
