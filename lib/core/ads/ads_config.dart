@@ -15,11 +15,11 @@ class AdsConfig {
 
   /// Master switch to completely enable/disable ads.
   /// Set to `true` to show ads, `false` to hide all ads everywhere.
-  static const bool enableAds = false;
+  static const bool enableAds = true;
 
   /// Set to `false` before publishing to production.
   /// In test mode all ad unit IDs point to Google's official test units.
-  static const bool testAds = true;
+  static const bool testAds = false;
 
   // ── Ad Unit IDs ─────────────────────────────────────────────────────
 
