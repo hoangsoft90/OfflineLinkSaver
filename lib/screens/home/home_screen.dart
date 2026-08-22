@@ -676,15 +676,17 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             final isSelected = _selectedCategoryId == cat.id;
             return Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: FilterChip(
-                avatar: Icon(Icons.circle, size: 12, color: cat.toColor),
-                label: Text(cat.name),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() => _selectedCategoryId = selected ? cat.id : null);
-                  _loadArticles();
-                },
+              child: GestureDetector(
                 onLongPress: () => _showCategoryManageDialog(),
+                child: FilterChip(
+                  avatar: Icon(Icons.circle, size: 12, color: cat.toColor),
+                  label: Text(cat.name),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    setState(() => _selectedCategoryId = selected ? cat.id : null);
+                    _loadArticles();
+                  },
+                ),
               ),
             );
           }),
